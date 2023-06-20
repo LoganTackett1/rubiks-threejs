@@ -748,11 +748,19 @@ let selectSide = [];
 
 let angle;
 let axis;
+let modifier = 1;
 
 
 function animate() {
-    
+
     trackBall.update();
+
+    if (touchScreen == false) {
+        modifier = 1;
+    } else {
+        modifier = 0.66;
+    }
+
     if (touchScreen == false) {
         rayCaster.setFromCamera(mousePosition,camera);
         intersects = rayCaster.intersectObjects(scene.children);
@@ -972,11 +980,11 @@ function animate() {
             if (selectDir == "z" || selectDir == "y") {
                 if(initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else if (initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else {
                     if (lock == false) {
@@ -989,11 +997,11 @@ function animate() {
             if (selectDir == "-z" || selectDir == "-y") {
                 if(initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else if (initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else {
                     if (lock == false) {
@@ -1008,11 +1016,11 @@ function animate() {
             if (selectDir == "x" || selectDir == "z") {
                 if(initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else if (initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else {
                     if (lock == false) {
@@ -1025,11 +1033,11 @@ function animate() {
             if (selectDir == "-x" || selectDir == "-z") {
                 if(initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else if (initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else {
                     if (lock == false) {
@@ -1044,11 +1052,11 @@ function animate() {
             if (selectDir == "-x" || selectDir == "y") {
                 if(initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else if (initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else {
                     if (lock == false) {
@@ -1061,11 +1069,11 @@ function animate() {
             if (selectDir == "x" || selectDir == "-y") {
                 if(initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else if (initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
-                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15,toAngle));
+                        calcRotationAroundAxis(object,selected[1],-Math.min(Math.PI/15*modifier,toAngle));
                     }
                 } else {
                     if (lock == false) {
