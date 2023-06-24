@@ -749,6 +749,7 @@ let selectSide = [];
 let angle;
 let axis;
 let modifier = 1;
+let scram = 1;
 
 
 function animate() {
@@ -757,8 +758,10 @@ function animate() {
 
     if (touchScreen == false) {
         modifier = 0.66;
+        scram = 1;
     } else {
         modifier = 1;
+        scram = 2;
     }
 
     if (touchScreen == false) {
@@ -794,7 +797,7 @@ function animate() {
             if (selectSide.length == 0) {
                 if (scrambleStack.current == "R") {
                     axis = "x";
-                    angle = Math.PI/16;
+                    angle = scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == 2) {
                             selectSide.push(item);
@@ -803,7 +806,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "r") {
                     axis = "x";
-                    angle = -Math.PI/16;
+                    angle = -scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == 2) {
                             selectSide.push(item);
@@ -812,7 +815,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "L") {
                     axis = "x";
-                    angle = Math.PI/16;
+                    angle = scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == -2) {
                             selectSide.push(item);
@@ -821,7 +824,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "l") {
                     axis = "x";
-                    angle = -Math.PI/16;
+                    angle = -scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == -2) {
                             selectSide.push(item);
@@ -830,7 +833,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "U") {
                     axis = "y";
-                    angle = Math.PI/16;
+                    angle = scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == 2) {
                             selectSide.push(item);
@@ -839,7 +842,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "u") {
                     axis = "y";
-                    angle = -Math.PI/16;
+                    angle = -scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == 2) {
                             selectSide.push(item);
@@ -848,7 +851,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "D") {
                     axis = "y";
-                    angle = Math.PI/16;
+                    angle = scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == -2) {
                             selectSide.push(item);
@@ -857,7 +860,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "d") {
                     axis = "y";
-                    angle = -Math.PI/16;
+                    angle = -scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == -2) {
                             selectSide.push(item);
@@ -866,7 +869,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "F") {
                     axis = "z";
-                    angle = Math.PI/16;
+                    angle = scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == 2) {
                             selectSide.push(item);
@@ -875,7 +878,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "f") {
                     axis = "z";
-                    angle = -Math.PI/16;
+                    angle = -scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == 2) {
                             selectSide.push(item);
@@ -884,7 +887,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "B") {
                     axis = "z";
-                    angle = Math.PI/16;
+                    angle = scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == -2) {
                             selectSide.push(item);
@@ -893,7 +896,7 @@ function animate() {
                 }
                 if (scrambleStack.current == "b") {
                     axis = "z";
-                    angle = -Math.PI/16;
+                    angle = -scram*Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == -2) {
                             selectSide.push(item);
