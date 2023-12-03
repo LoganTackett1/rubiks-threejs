@@ -726,6 +726,165 @@ if (touchScreen == true) {
     });
 }
 
+/* 
+    Development of solving algorithm
+    0 through 5 act as the colors for the cube
+
+    The order of the arrays for the sides is R L F B U D
+*/
+function createSideArray(char) {
+    return new Array(9).fill(char);
+}
+
+const cubeArr = [];
+for (let i = 0; i < 6; i++) {
+    cubeArr.push(createSideArray(i));
+}
+
+function rotateSideArr (side) {
+    return [side[6],side[3],side[0],
+            side[7],side[4],side[1],
+            side[8],side[5],side[2]];
+}
+
+// cycleSides takes in the indexes for the sides in question and does the swapping for you.
+// The array input will be an array that contains the indexes of each side needing to be swapped.
+
+function cycleSides (sideArr,array) {
+    const dupe = new Array(4);
+    dupe[0] = [...sideArr[0]];
+    dupe[1] = [...sideArr[1]];
+    dupe[2] = [...sideArr[2]];
+    dupe[3] = [...sideArr[3]];
+
+    for (let i = 0; i < sideArr.length; i++) {
+        const curr = sideArr[(i+1) % 4];
+        const base = dupe[i];
+
+        for (let index of array) {
+            curr[index] = base[index];
+        }
+    }
+}
+
+function executeTurn (turn,cubeArr) {
+    if (turn == "R") {
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cycleSides([cubeArr[2],cubeArr[4],cubeArr[3],cubeArr[5]],[2,5,8]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+    } else if (turn == "r") {
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cycleSides([cubeArr[5],cubeArr[3],cubeArr[4],cubeArr[2]],[2,5,8]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+    } else if (turn == "L") {
+        cubeArr[1] = rotateSideArr(cubeArr[1]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cycleSides([cubeArr[5],cubeArr[3],cubeArr[4],cubeArr[2]],[0,3,6]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+    } else if (turn == "l") {
+        cubeArr[1] = rotateSideArr(cubeArr[1]);
+        cubeArr[1] = rotateSideArr(cubeArr[1]);
+        cubeArr[1] = rotateSideArr(cubeArr[1]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cycleSides([cubeArr[2],cubeArr[4],cubeArr[3],cubeArr[5]],[0,3,6]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+    } else if (turn == "F") {
+        cubeArr[2] = rotateSideArr(cubeArr[2]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cycleSides([cubeArr[1],cubeArr[4],cubeArr[0],cubeArr[5]],[2,5,8]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+    } else if (turn == "f") {
+        cubeArr[2] = rotateSideArr(cubeArr[2]);
+        cubeArr[2] = rotateSideArr(cubeArr[2]);
+        cubeArr[2] = rotateSideArr(cubeArr[2]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cycleSides([cubeArr[5],cubeArr[0],cubeArr[4],cubeArr[1]],[2,5,8]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+    } else if (turn == "B") {
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cycleSides([cubeArr[1],cubeArr[5],cubeArr[0],cubeArr[4]],[0,3,6]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+    } else if (turn == "b") {
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cycleSides([cubeArr[4],cubeArr[0],cubeArr[5],cubeArr[1]],[0,3,6]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+    } else if (turn == "U") {
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cycleSides([cubeArr[2],cubeArr[1],cubeArr[3],cubeArr[0]],[0,1,2]);
+    } else if (turn == "u") {
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cycleSides([cubeArr[0],cubeArr[3],cubeArr[1],cubeArr[2]],[0,1,2]);
+    } else if (turn == "D") {
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cycleSides([cubeArr[0],cubeArr[3],cubeArr[1],cubeArr[2]],[6,7,8]);
+    } else if (turn == "d") {
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cycleSides([cubeArr[2],cubeArr[1],cubeArr[3],cubeArr[0]],[6,7,8]);
+    }
+}
+
+console.log(cubeArr);
+
 /*
 let bool = true;
 let number = 30;
