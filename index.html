@@ -41,6 +41,8 @@ const camera = new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeig
 
 const trackBall = new TrackballControls(camera, renderer.domElement);
 
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 
 camera.position.set(18,18,18);
 trackBall.update();
@@ -473,6 +475,7 @@ function getDirection(vector) {
 function selectPieces(initPiece,plane,direction) {
     let result = [];
     let turn;
+    
     if (plane.dirNorm == "x" || plane.dirNorm == "-x") {
         if (direction == "z" || direction == "-z") {
             for (let item of cubes) {
@@ -482,7 +485,7 @@ function selectPieces(initPiece,plane,direction) {
             }
             if (plane.dirNorm == "x") {
                 if (direction == "z") {turn = "-y";}
-                if (direction == "-z") {turn = "y";}
+                if (direction == "-z") {turn = "y";} 
             }
             if (plane.dirNorm == "-x") {
                 if (direction == "z") {turn = "y";}
@@ -578,6 +581,7 @@ function selectPieces(initPiece,plane,direction) {
             reset = true;
         }
     }
+
     return [result,turn];
 }
 
@@ -663,7 +667,7 @@ scrambleStack.stack = [];
 let scramToggle = false;
 
 // R is right clockwise r is right counter clockwise
-
+/*
 function generateScramble() {
     if (scramToggle == false) {
     for (let i = 1; i <= 20; i++) {
@@ -708,6 +712,17 @@ function generateScramble() {
     scramToggle = true;
 }
 }
+*/
+
+function generateScramble() {
+    if (scramToggle == false) {
+    for (let i = 1; i <= 1; i++) {
+        scrambleStack.stack.push("R");
+    }
+    scramToggle = true;
+}
+}
+
 
 if (touchScreen == false) {
     resetBtn.addEventListener("click", e => {
@@ -883,6 +898,183 @@ function executeTurn (turn,cubeArr) {
     }
 }
 
+function getMoves(turn,position,angle) {
+    let moves;
+    console.log(turn,position,angle);
+    if (turn == "y" && angle >= 0 ) {
+        const ypos = position.y;
+        if (ypos == 2) {
+            moves = ["U"];
+        }
+        if (ypos == 0) {
+            moves = ["u","D"];
+        }
+        if (ypos == -2) {
+            moves = ["d"];
+        }
+    }
+    if (turn == "y" && angle < 0 ) {
+        const ypos = position.y;
+        if (ypos == 2) {
+            moves = ["u"];
+        }
+        if (ypos == 0) {
+            moves = ["U","d"];
+        }
+        if (ypos == -2) {
+            moves = ["D"];
+        }
+    }
+    //=======================
+    if (turn == "-y" && angle >= 0 ) {
+        const ypos = position.y;
+        if (ypos == 2) {
+            moves = ["u"];
+        }
+        if (ypos == 0) {
+            moves = ["U","d"];
+        }
+        if (ypos == -2) {
+            moves = ["D"];
+        }
+    }
+    if (turn == "-y" && angle < 0 ) {
+        const ypos = position.y;
+        if (ypos == 2) {
+            moves = ["U"];
+        }
+        if (ypos == 0) {
+            moves = ["u","D"];
+        }
+        if (ypos == -2) {
+            moves = ["d"];
+        }
+    }
+    //=======================
+    if (turn == "x" && angle >= 0 ) {
+        const xpos = position.x;
+        if (xpos == 2) {
+            moves = ["R"];
+        }
+        if (xpos == 0) {
+            moves = ["r","L"];
+        }
+        if (xpos == -2) {
+            moves = ["l"];
+        }
+    }
+    if (turn == "x" && angle < 0 ) {
+        const xpos = position.x;
+        if (xpos == 2) {
+            moves = ["r"];
+        }
+        if (xpos == 0) {
+            moves = ["R","l"];
+        }
+        if (xpos == -2) {
+            moves = ["L"];
+        }
+    }
+    //=======================
+    if (turn == "-x" && angle >= 0 ) {
+        const xpos = position.x;
+        if (xpos == 2) {
+            moves = ["r"];
+        }
+        if (xpos == 0) {
+            moves = ["R","l"];
+        }
+        if (xpos == -2) {
+            moves = ["L"];
+        }
+    }
+    if (turn == "-x" && angle < 0 ) {
+        const xpos = position.x;
+        if (xpos == 2) {
+            moves = ["R"];
+        }
+        if (xpos == 0) {
+            moves = ["r","L"];
+        }
+        if (xpos == -2) {
+            moves = ["l"];
+        }
+    }
+    //======================
+    if (turn == "z" && angle >= 0) {
+        const zpos = position.z;
+        if (zpos == 2) {
+            moves = ["F"];
+        }
+        if (zpos == 0) {
+            moves = ["f","B"];
+        }
+        if (zpos == -2) {
+            moves = ["b"];
+        }
+    }
+    if (turn == "z" && angle < 0) {
+        const zpos = position.z;
+        if (zpos == 2) {
+            moves = ["f"];
+        }
+        if (zpos == 0) {
+            moves = ["F","b"];
+        }
+        if (zpos == -2) {
+            moves = ["B"];
+        }
+    }
+    //======================
+    if (turn == "-z" && angle >= 0) {
+        const zpos = position.z;
+        if (zpos == 2) {
+            moves = ["f"];
+        }
+        if (zpos == 0) {
+            moves = ["F","b"];
+        }
+        if (zpos == -2) {
+            moves = ["B"];
+        }
+    }
+    if (turn == "-z" && angle < 0) {
+        const zpos = position.z;
+        if (zpos == 2) {
+            moves = ["F"];
+        }
+        if (zpos == 0) {
+            moves = ["f","B"];
+        }
+        if (zpos == -2) {
+            moves = ["b"];
+        }
+    }
+
+    return moves;
+}
+
+function executeMoves (arr) {
+    console.log(arr);
+    for (let move of arr) {
+        executeTurn(move,cubeArr);
+    }
+    console.log(cubeArr);
+}
+
+function checkPrev (pos,prevPos) {
+    if (pos.x != prevPos.x) {
+        return true;
+    }
+    if (pos.y != prevPos.y) {
+        return true;
+    }
+    if (pos.z != prevPos.z) {
+        return true;
+    }
+    return false;
+}
+
 console.log(cubeArr);
 
 /*
@@ -904,6 +1096,8 @@ let radius;
 let intersects;
 let rStep;
 let selectSide = [];
+let angleSign = 0;
+let prevPos = null;
 
 let angle;
 let axis;
@@ -955,8 +1149,9 @@ function animate() {
         if (scrambleStack.current != null) {
             if (selectSide.length == 0) {
                 if (scrambleStack.current == "R") {
+                    executeTurn("R",cubeArr);
                     axis = "x";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == 2) {
                             selectSide.push(item);
@@ -964,8 +1159,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "r") {
+                    executeTurn("r",cubeArr);
                     axis = "x";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == 2) {
                             selectSide.push(item);
@@ -973,8 +1169,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "L") {
+                    executeTurn("L",cubeArr);
                     axis = "x";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == -2) {
                             selectSide.push(item);
@@ -982,8 +1179,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "l") {
+                    executeTurn("l",cubeArr);
                     axis = "x";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == -2) {
                             selectSide.push(item);
@@ -991,8 +1189,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "U") {
+                    executeTurn("U",cubeArr);
                     axis = "y";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == 2) {
                             selectSide.push(item);
@@ -1000,8 +1199,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "u") {
+                    executeTurn("u",cubeArr);
                     axis = "y";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == 2) {
                             selectSide.push(item);
@@ -1009,8 +1209,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "D") {
+                    executeTurn("D",cubeArr);
                     axis = "y";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == -2) {
                             selectSide.push(item);
@@ -1018,8 +1219,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "d") {
+                    executeTurn("d",cubeArr);
                     axis = "y";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == -2) {
                             selectSide.push(item);
@@ -1027,8 +1229,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "F") {
+                    executeTurn("F",cubeArr);
                     axis = "z";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == 2) {
                             selectSide.push(item);
@@ -1036,8 +1239,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "f") {
+                    executeTurn("f",cubeArr);
                     axis = "z";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == 2) {
                             selectSide.push(item);
@@ -1045,8 +1249,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "B") {
+                    executeTurn("B",cubeArr);
                     axis = "z";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == -2) {
                             selectSide.push(item);
@@ -1054,8 +1259,9 @@ function animate() {
                     }
                 }
                 if (scrambleStack.current == "b") {
+                    executeTurn("b",cubeArr);
                     axis = "z";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == -2) {
                             selectSide.push(item);
@@ -1067,6 +1273,7 @@ function animate() {
                 scrambleStack.current = null;
                 roundCubelets(selectSide);
                 selectSide = [];
+                console.log(cubeArr);
             } else {
                 rStep -= 1;
                 for (let item of selectSide) {
@@ -1112,6 +1319,10 @@ function animate() {
                     determinant.copy(delta);
                     selectDir = getDirection(determinant);
                     selected = selectPieces(initCubelet,initPlane.object,selectDir);
+                    prevPos = new THREE.Vector3();
+                    prevPos.x = selected[0][0].position.x;
+                    prevPos.y = selected[0][0].position.y;
+                    prevPos.z = selected[0][0].position.z;
                     if(initCubelet.position[mapBase(initPlane.object.dirNorm)]**2 + initCubelet.position[mapBase(selectDir)]**2 > 7) {
                         radius = 8**0.5;
                     } else {
@@ -1137,7 +1348,7 @@ function animate() {
             ready = false;
         }
         let toAngle = Math.abs(Math.acos(checkVal(toCoord[0]/(radius),1,-1))-Math.acos(checkVal(initCubelet.position[toCoord[1]]/(radius),1,-1)));
-    
+        angleSign = toAngle >= 0 ? 1 : -1;
         if (initPlane.object.dirNorm == "x" || initPlane.object.dirNorm == "-x") {
             if (selectDir == "z" || selectDir == "y") {
                 if(initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
@@ -1152,6 +1363,9 @@ function animate() {
                     if (lock == false) {
                         movePieces = false;
                         roundCubelets(selected[0]);
+                        if (checkPrev(selected[0][0].position,prevPos)) {
+                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                        }
                         reset = true;
                     }
                 }
@@ -1169,6 +1383,9 @@ function animate() {
                     if (lock == false) {
                         movePieces = false;
                         roundCubelets(selected[0]);
+                        if (checkPrev(selected[0][0].position,prevPos)) {
+                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                        }
                         reset = true;
                     }
                 }
@@ -1188,6 +1405,9 @@ function animate() {
                     if (lock == false) {
                         movePieces = false;
                         roundCubelets(selected[0]);
+                        if (checkPrev(selected[0][0].position,prevPos)) {
+                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                        }
                         reset = true;
                     }
                 }
@@ -1205,6 +1425,9 @@ function animate() {
                     if (lock == false) {
                         movePieces = false;
                         roundCubelets(selected[0]);
+                        if (checkPrev(selected[0][0].position,prevPos)) {
+                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                        }
                         reset = true;
                     }
                 }
@@ -1224,6 +1447,9 @@ function animate() {
                     if (lock == false) {
                         movePieces = false;
                         roundCubelets(selected[0]);
+                        if (checkPrev(selected[0][0].position,prevPos)) {
+                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                        }
                         reset = true;
                     }
                 }
@@ -1241,6 +1467,9 @@ function animate() {
                     if (lock == false) {
                         movePieces = false;
                         roundCubelets(selected[0]);
+                        if (checkPrev(selected[0][0].position,prevPos)) {
+                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                        }
                         reset = true;
                     }
                 }
@@ -1252,6 +1481,7 @@ function animate() {
         initCubelet = null;
         initObject = null;
         initPlane = null;
+        angleSign = 0;
         if (touchScreen == true) {
             currObject = null;
             currPlane = null;
