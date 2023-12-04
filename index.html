@@ -41,9 +41,6 @@ const camera = new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeig
 
 const trackBall = new TrackballControls(camera, renderer.domElement);
 
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper );
-
 camera.position.set(18,18,18);
 trackBall.update();
 
@@ -223,6 +220,10 @@ for (let item of cubes) {
 
 function resetCube() {
     if (!(scramToggle == true || movePieces == true)) {
+            cubeArr = [];
+        for (let i = 0; i < 6; i++) {
+            cubeArr.push(createSideArray(i));
+        }
         for (let item of cubes) {
             item.position.set(item.solvedPos.x,item.solvedPos.y,item.solvedPos.z);
             item.rotation.x = item.solvedRot._x;
@@ -475,7 +476,6 @@ function getDirection(vector) {
 function selectPieces(initPiece,plane,direction) {
     let result = [];
     let turn;
-    
     if (plane.dirNorm == "x" || plane.dirNorm == "-x") {
         if (direction == "z" || direction == "-z") {
             for (let item of cubes) {
@@ -554,12 +554,12 @@ function selectPieces(initPiece,plane,direction) {
                 }
             }
             if (plane.dirNorm == "z") {
-                if (direction == "x") {turn = "-y";}
-                if (direction == "-x") {turn = "y";}
-            }
-            if (plane.dirNorm == "-z") {
                 if (direction == "x") {turn = "y";}
                 if (direction == "-x") {turn = "-y";}
+            }
+            if (plane.dirNorm == "-z") {
+                if (direction == "x") {turn = "-y";}
+                if (direction == "-x") {turn = "y";}
             }
         }
         if (direction == "y" || direction == "-y") {
@@ -581,7 +581,9 @@ function selectPieces(initPiece,plane,direction) {
             reset = true;
         }
     }
-
+    if (result.length == 0) {
+        return false;
+    } 
     return [result,turn];
 }
 
@@ -666,8 +668,6 @@ scrambleStack.current = null;
 scrambleStack.stack = [];
 let scramToggle = false;
 
-// R is right clockwise r is right counter clockwise
-/*
 function generateScramble() {
     if (scramToggle == false) {
     for (let i = 1; i <= 20; i++) {
@@ -712,16 +712,6 @@ function generateScramble() {
     scramToggle = true;
 }
 }
-*/
-
-function generateScramble() {
-    if (scramToggle == false) {
-    for (let i = 1; i <= 1; i++) {
-        scrambleStack.stack.push("R");
-    }
-    scramToggle = true;
-}
-}
 
 
 if (touchScreen == false) {
@@ -751,7 +741,7 @@ function createSideArray(char) {
     return new Array(9).fill(char);
 }
 
-const cubeArr = [];
+let cubeArr = [];
 for (let i = 0; i < 6; i++) {
     cubeArr.push(createSideArray(i));
 }
@@ -895,170 +885,167 @@ function executeTurn (turn,cubeArr) {
         cubeArr[5] = rotateSideArr(cubeArr[5]);
         cubeArr[5] = rotateSideArr(cubeArr[5]);
         cycleSides([cubeArr[2],cubeArr[1],cubeArr[3],cubeArr[0]],[6,7,8]);
+    } else if (turn == "Mr") {
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cycleSides([cubeArr[2],cubeArr[4],cubeArr[3],cubeArr[5]],[1,4,7]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+    } else if (turn == "mr") {
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cycleSides([cubeArr[5],cubeArr[3],cubeArr[4],cubeArr[2]],[1,4,7]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+        cubeArr[3] = rotateSideArr(cubeArr[3]);
+    } else if (turn == "Mf") {
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cycleSides([cubeArr[1],cubeArr[4],cubeArr[0],cubeArr[5]],[1,4,7]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+    } else if (turn == "mf") {
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cycleSides([cubeArr[5],cubeArr[0],cubeArr[4],cubeArr[1]],[1,4,7]);
+        cubeArr[4] = rotateSideArr(cubeArr[4]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[0] = rotateSideArr(cubeArr[0]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+        cubeArr[5] = rotateSideArr(cubeArr[5]);
+    } else if (turn == "Mu") {
+        cycleSides([cubeArr[2],cubeArr[1],cubeArr[3],cubeArr[0]],[3,4,5]);
+    } else if (turn == "mu") {
+        cycleSides([cubeArr[0],cubeArr[3],cubeArr[1],cubeArr[2]],[3,4,5]);
+    }
+}
+
+function calculateEndDir (turn,pPos,nPos) {
+    if (turn == "x" || turn == "-x") {
+        const factor = ((nPos.z*pPos.y-pPos.z*nPos.y)/(nPos.z**2+nPos.y**2));
+        if (factor > 0) {
+            return "x";
+        } else {
+            return "-x";
+        }
+    }
+    if (turn == "y" || turn == "-y") {
+        const factor = ((nPos.x*pPos.z-pPos.x*nPos.z)/(nPos.x**2+nPos.z**2));
+        if (factor > 0) {
+            return "y";
+        } else {
+            return "-y";
+        }
+    }
+    if (turn == "z" || turn == "-z") {
+        const factor = ((nPos.x*pPos.y-pPos.x*nPos.y)/(nPos.x**2+nPos.y**2));
+        if (factor > 0) {
+            return "z";
+        } else {
+            return "-z";
+        }
     }
 }
 
 function getMoves(turn,position,angle) {
     let moves;
     console.log(turn,position,angle);
-    if (turn == "y" && angle >= 0 ) {
+    if (turn == "-y") {
         const ypos = position.y;
         if (ypos == 2) {
-            moves = ["U"];
+            moves = "U";
         }
         if (ypos == 0) {
-            moves = ["u","D"];
+            moves = "Mu";
         }
         if (ypos == -2) {
-            moves = ["d"];
-        }
-    }
-    if (turn == "y" && angle < 0 ) {
-        const ypos = position.y;
-        if (ypos == 2) {
-            moves = ["u"];
-        }
-        if (ypos == 0) {
-            moves = ["U","d"];
-        }
-        if (ypos == -2) {
-            moves = ["D"];
+            moves = "d";
         }
     }
     //=======================
-    if (turn == "-y" && angle >= 0 ) {
+    if (turn == "y") {
         const ypos = position.y;
         if (ypos == 2) {
-            moves = ["u"];
+            moves = "u";
         }
         if (ypos == 0) {
-            moves = ["U","d"];
+            moves = "mu";
         }
         if (ypos == -2) {
-            moves = ["D"];
-        }
-    }
-    if (turn == "-y" && angle < 0 ) {
-        const ypos = position.y;
-        if (ypos == 2) {
-            moves = ["U"];
-        }
-        if (ypos == 0) {
-            moves = ["u","D"];
-        }
-        if (ypos == -2) {
-            moves = ["d"];
+            moves = "D";
         }
     }
     //=======================
-    if (turn == "x" && angle >= 0 ) {
+    if (turn == "-x") {
         const xpos = position.x;
         if (xpos == 2) {
-            moves = ["R"];
+            moves = "R";
         }
         if (xpos == 0) {
-            moves = ["r","L"];
+            moves = "Mr";
         }
         if (xpos == -2) {
-            moves = ["l"];
-        }
-    }
-    if (turn == "x" && angle < 0 ) {
-        const xpos = position.x;
-        if (xpos == 2) {
-            moves = ["r"];
-        }
-        if (xpos == 0) {
-            moves = ["R","l"];
-        }
-        if (xpos == -2) {
-            moves = ["L"];
+            moves = "l";
         }
     }
     //=======================
-    if (turn == "-x" && angle >= 0 ) {
+    if (turn == "x") {
         const xpos = position.x;
         if (xpos == 2) {
-            moves = ["r"];
+            moves = "r";
         }
         if (xpos == 0) {
-            moves = ["R","l"];
+            moves = "mr";
         }
         if (xpos == -2) {
-            moves = ["L"];
-        }
-    }
-    if (turn == "-x" && angle < 0 ) {
-        const xpos = position.x;
-        if (xpos == 2) {
-            moves = ["R"];
-        }
-        if (xpos == 0) {
-            moves = ["r","L"];
-        }
-        if (xpos == -2) {
-            moves = ["l"];
+            moves = "L";
         }
     }
     //======================
-    if (turn == "z" && angle >= 0) {
+    if (turn == "-z") {
         const zpos = position.z;
         if (zpos == 2) {
-            moves = ["F"];
+            moves = "F";
         }
         if (zpos == 0) {
-            moves = ["f","B"];
+            moves = "Mf";
         }
         if (zpos == -2) {
-            moves = ["b"];
-        }
-    }
-    if (turn == "z" && angle < 0) {
-        const zpos = position.z;
-        if (zpos == 2) {
-            moves = ["f"];
-        }
-        if (zpos == 0) {
-            moves = ["F","b"];
-        }
-        if (zpos == -2) {
-            moves = ["B"];
+            moves = "b";
         }
     }
     //======================
-    if (turn == "-z" && angle >= 0) {
+    if (turn == "z") {
         const zpos = position.z;
         if (zpos == 2) {
-            moves = ["f"];
+            moves = "f";
         }
         if (zpos == 0) {
-            moves = ["F","b"];
+            moves = "mf";
         }
         if (zpos == -2) {
-            moves = ["B"];
-        }
-    }
-    if (turn == "-z" && angle < 0) {
-        const zpos = position.z;
-        if (zpos == 2) {
-            moves = ["F"];
-        }
-        if (zpos == 0) {
-            moves = ["f","B"];
-        }
-        if (zpos == -2) {
-            moves = ["b"];
+            moves = "B";
         }
     }
 
     return moves;
 }
 
-function executeMoves (arr) {
-    console.log(arr);
-    for (let move of arr) {
-        executeTurn(move,cubeArr);
-    }
+function executeMoves (move) {
+    console.log(move);
+    executeTurn(move,cubeArr);
     console.log(cubeArr);
 }
 
@@ -1104,6 +1091,8 @@ let axis;
 let modifier = 1;
 let scram = 1;
 
+// current issues: middle moves not addressed properly for array form
+// issue with scrambling and move mapping. scramble results in incorrect moves.
 
 function animate() {
 
@@ -1319,10 +1308,15 @@ function animate() {
                     determinant.copy(delta);
                     selectDir = getDirection(determinant);
                     selected = selectPieces(initCubelet,initPlane.object,selectDir);
-                    prevPos = new THREE.Vector3();
-                    prevPos.x = selected[0][0].position.x;
-                    prevPos.y = selected[0][0].position.y;
-                    prevPos.z = selected[0][0].position.z;
+                    if (!selected) {
+                        lock = false;
+                        reset = true;
+                    } else {
+                        prevPos = new THREE.Vector3();
+                        prevPos.x = selected[0][0].position.x;
+                        prevPos.y = selected[0][0].position.y;
+                        prevPos.z = selected[0][0].position.z;
+                    }
                     if(initCubelet.position[mapBase(initPlane.object.dirNorm)]**2 + initCubelet.position[mapBase(selectDir)]**2 > 7) {
                         radius = 8**0.5;
                     } else {
@@ -1348,7 +1342,6 @@ function animate() {
             ready = false;
         }
         let toAngle = Math.abs(Math.acos(checkVal(toCoord[0]/(radius),1,-1))-Math.acos(checkVal(initCubelet.position[toCoord[1]]/(radius),1,-1)));
-        angleSign = toAngle >= 0 ? 1 : -1;
         if (initPlane.object.dirNorm == "x" || initPlane.object.dirNorm == "-x") {
             if (selectDir == "z" || selectDir == "y") {
                 if(initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
@@ -1364,7 +1357,7 @@ function animate() {
                         movePieces = false;
                         roundCubelets(selected[0]);
                         if (checkPrev(selected[0][0].position,prevPos)) {
-                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                            executeMoves(getMoves(calculateEndDir(selected[1],prevPos,selected[0][0].position),initCubelet.position));
                         }
                         reset = true;
                     }
@@ -1384,7 +1377,7 @@ function animate() {
                         movePieces = false;
                         roundCubelets(selected[0]);
                         if (checkPrev(selected[0][0].position,prevPos)) {
-                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                            executeMoves(getMoves(calculateEndDir(selected[1],prevPos,selected[0][0].position),initCubelet.position));
                         }
                         reset = true;
                     }
@@ -1406,7 +1399,7 @@ function animate() {
                         movePieces = false;
                         roundCubelets(selected[0]);
                         if (checkPrev(selected[0][0].position,prevPos)) {
-                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                            executeMoves(getMoves(calculateEndDir(selected[1],prevPos,selected[0][0].position),initCubelet.position));
                         }
                         reset = true;
                     }
@@ -1426,7 +1419,7 @@ function animate() {
                         movePieces = false;
                         roundCubelets(selected[0]);
                         if (checkPrev(selected[0][0].position,prevPos)) {
-                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                            executeMoves(getMoves(calculateEndDir(selected[1],prevPos,selected[0][0].position),initCubelet.position));
                         }
                         reset = true;
                     }
@@ -1434,7 +1427,7 @@ function animate() {
             }
         }
         if (initPlane.object.dirNorm == "z" || initPlane.object.dirNorm == "-z") {
-            if (selectDir == "-x" || selectDir == "y") {
+            if (selectDir == "x" || selectDir == "y") {
                 if(initCubelet.position[toCoord[1]] < toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
                         calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
@@ -1448,13 +1441,13 @@ function animate() {
                         movePieces = false;
                         roundCubelets(selected[0]);
                         if (checkPrev(selected[0][0].position,prevPos)) {
-                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                            executeMoves(getMoves(calculateEndDir(selected[1],prevPos,selected[0][0].position),initCubelet.position));
                         }
                         reset = true;
                     }
                 }
             }
-            if (selectDir == "x" || selectDir == "-y") {
+            if (selectDir == "-x" || selectDir == "-y") {
                 if(initCubelet.position[toCoord[1]] > toCoord[0] && Math.abs(initCubelet.position[toCoord[1]]-toCoord[0]) > 0.001) {
                     for (let object of selected[0]) {
                         calcRotationAroundAxis(object,selected[1],Math.min(Math.PI/15*modifier,toAngle));
@@ -1468,7 +1461,7 @@ function animate() {
                         movePieces = false;
                         roundCubelets(selected[0]);
                         if (checkPrev(selected[0][0].position,prevPos)) {
-                            executeMoves(getMoves(selected[1],initCubelet.position,angleSign));
+                            executeMoves(getMoves(calculateEndDir(selected[1],prevPos,selected[0][0].position),initCubelet.position));
                         }
                         reset = true;
                     }
@@ -1527,3 +1520,4 @@ window.addEventListener("resize", function () {
 <body>
 </body>
 </html>
+
