@@ -1804,20 +1804,33 @@ function solveRubiksArr (cubeArr) {
 
     }
 
-    solveCross(dupeArr[4][4],dupeArr);
-    console.log("solved cross");
-    solveCorners(dupeArr[4][4],dupeArr);
-    console.log("solved corners");
-    solveMiddleEdges(dupeArr[4][4],dupeArr);
-    console.log("solved middle edges");
-    executeMoveMult(["ROTR","ROTR"]);
-    solveYellowCross(dupeArr[4][4],dupeArr)
-    console.log("solved yellow cross!");
-    orientLastLayer(dupeArr[4][4],dupeArr);
-    console.log("oriented");
-    permuteLastLayer(dupeArr[4][4],dupeArr);
-    console.log("solved");
-    insertSolve(moveStack.reverse());
+    function checkSolved (cubeArr) {
+            for (let side of cubeArr) {
+                for (let i = 0; i < 8; i++) {
+                    if (side[i] !== side[i+1]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+    if (!checkSolved(dupeArr)) {
+        solveCross(dupeArr[4][4],dupeArr);
+        console.log("solved cross");
+        solveCorners(dupeArr[4][4],dupeArr);
+        console.log("solved corners");
+        solveMiddleEdges(dupeArr[4][4],dupeArr);
+        console.log("solved middle edges");
+        executeMoveMult(["ROTR","ROTR"]);
+        solveYellowCross(dupeArr[4][4],dupeArr)
+        console.log("solved yellow cross!");
+        orientLastLayer(dupeArr[4][4],dupeArr);
+        console.log("oriented");
+        permuteLastLayer(dupeArr[4][4],dupeArr);
+        console.log("solved");
+        insertSolve(moveStack.reverse());
+    }
 
 }
 
