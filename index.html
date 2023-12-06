@@ -1763,7 +1763,7 @@ function solveRubiksArr (cubeArr) {
 
         let temp = 0;
         for (let i = 0; i < 4; i++) {
-            if ((cubeArr[2][0] == cubeArr[2][1] && cubeArr[2][1] == cubeArr[2][2]) && (cubeArr[0][0] !== cubeArr[0][1])) {
+            if ((cubeArr[2][0] == cubeArr[2][1]) && (cubeArr[0][0] !== cubeArr[0][1])) {
                 if (cubeArr[1][1] == cubeArr[3][0]) {
                     executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
                     break;
@@ -1780,7 +1780,7 @@ function solveRubiksArr (cubeArr) {
         if (temp == 4) {
             executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
             for (let i = 0; i < 4; i++) {
-                if ((cubeArr[2][0] == cubeArr[2][1] && cubeArr[2][1] == cubeArr[2][2]) && (cubeArr[0][0] !== cubeArr[0][1])) {
+                if ((cubeArr[2][0] == cubeArr[2][1]) && (cubeArr[0][0] !== cubeArr[0][1])) {
                     if (cubeArr[1][1] == cubeArr[3][0]) {
                         executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
                         break;
@@ -1791,7 +1791,7 @@ function solveRubiksArr (cubeArr) {
                 } else {
                     executeMove("ROTU");
                 }
-            }
+        }
         }
     
         while (cubeArr[2][0] !== cubeArr[2][4]) {
