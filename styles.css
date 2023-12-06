@@ -3,6 +3,11 @@
     padding: 0;
 }
 
+html {
+    overflow: hidden;
+    width: 100%;
+}
+
 body {
     position: fixed;
     width: 100vw;
