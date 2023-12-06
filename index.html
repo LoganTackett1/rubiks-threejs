@@ -26,6 +26,7 @@ import { CSS2DRenderer, CSS2DObject } from 'CSS2DRenderer';
 const renderer = new THREE.WebGLRenderer({antialias:true});
 
 renderer.setSize(window.innerWidth,window.innerHeight);
+
 renderer.setPixelRatio(window.devicePixelRatio*0.8);
 
 document.body.appendChild(renderer.domElement);
@@ -36,6 +37,8 @@ const scene = new THREE.Scene();
 renderer.setClearColor(0x808080);
 
 const camera = new THREE.PerspectiveCamera(40,window.innerWidth/window.innerHeight,0.1,1000);
+camera.aspect = window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
 
 //const orbit = new OrbitControls(camera, renderer.domElement); 
 
@@ -660,6 +663,11 @@ scrambleBtn.className = "scramble_button";
 scrambleBtn.textContent = "Scramble";
 container.appendChild(scrambleBtn);
 
+const solveBtn = document.createElement("button");
+solveBtn.className = "solve_button";
+solveBtn.textContent = "Solve";
+container.appendChild(solveBtn);
+
 const containerObject = new CSS2DObject(container);
 scene.add(containerObject);
 
@@ -670,8 +678,8 @@ let scramToggle = false;
 
 function generateScramble() {
     if (scramToggle == false) {
-    for (let i = 1; i <= 20; i++) {
-        let num = Math.floor(12*Math.random());
+    for (let i = 1; i <= 24; i++) {
+        let num = Math.floor(24*Math.random());
         if (num == 0) {
             scrambleStack.stack.push("R");
         }
@@ -708,27 +716,54 @@ function generateScramble() {
         if (num == 11) {
             scrambleStack.stack.push("b");
         }
+        if (num == 12) {
+            scrambleStack.stack.push("MR");
+        }
+        if (num == 13) {
+            scrambleStack.stack.push("mr");
+        }
+        if (num == 14) {
+            scrambleStack.stack.push("MU");
+        }
+        if (num == 15) {
+            scrambleStack.stack.push("mu");
+        }
+        if (num == 16) {
+            scrambleStack.stack.push("MF");
+        }
+        if (num == 17) {
+            scrambleStack.stack.push("mf");
+        }
+        if (num == 18) {
+            scrambleStack.stack.push("rotr");
+        }
+        if (num == 19) {
+            scrambleStack.stack.push("rotu");
+        }
+        if (num == 20) {
+            scrambleStack.stack.push("rotf");
+        }
+        if (num == 21) {
+            scrambleStack.stack.push("ROTR");
+        }
+        if (num == 22) {
+            scrambleStack.stack.push("ROTU");
+        }
+        if (num == 23) {
+            scrambleStack.stack.push("ROTF");
+        }
     }
     scramToggle = true;
 }
 }
 
-
-if (touchScreen == false) {
-    resetBtn.addEventListener("click", e => {
-        resetCube();
-    });
-    scrambleBtn.addEventListener("click", e => {
-        generateScramble();
-    });
+function insertSolve(solArr) {
+    if (scramToggle == false) {
+    for (let i = 0; i < solArr.length; i++) {
+            scrambleStack.stack.push(solArr[i]);
+    }
+    scramToggle = true;
 }
-if (touchScreen == true) {
-    resetBtn.addEventListener("touchstart", e => {
-        resetCube();
-    });
-    scrambleBtn.addEventListener("touchstart", e => {
-        generateScramble();
-    });
 }
 
 /* 
@@ -885,7 +920,7 @@ function executeTurn (turn,cubeArr) {
         cubeArr[5] = rotateSideArr(cubeArr[5]);
         cubeArr[5] = rotateSideArr(cubeArr[5]);
         cycleSides([cubeArr[2],cubeArr[1],cubeArr[3],cubeArr[0]],[6,7,8]);
-    } else if (turn == "Mr") {
+    } else if (turn == "MR") {
         cubeArr[3] = rotateSideArr(cubeArr[3]);
         cubeArr[3] = rotateSideArr(cubeArr[3]);
         cycleSides([cubeArr[2],cubeArr[4],cubeArr[3],cubeArr[5]],[1,4,7]);
@@ -897,7 +932,7 @@ function executeTurn (turn,cubeArr) {
         cycleSides([cubeArr[5],cubeArr[3],cubeArr[4],cubeArr[2]],[1,4,7]);
         cubeArr[3] = rotateSideArr(cubeArr[3]);
         cubeArr[3] = rotateSideArr(cubeArr[3]);
-    } else if (turn == "Mf") {
+    } else if (turn == "MF") {
         cubeArr[4] = rotateSideArr(cubeArr[4]);
         cubeArr[4] = rotateSideArr(cubeArr[4]);
         cubeArr[4] = rotateSideArr(cubeArr[4]);
@@ -925,10 +960,34 @@ function executeTurn (turn,cubeArr) {
         cubeArr[5] = rotateSideArr(cubeArr[5]);
         cubeArr[5] = rotateSideArr(cubeArr[5]);
         cubeArr[5] = rotateSideArr(cubeArr[5]);
-    } else if (turn == "Mu") {
+    } else if (turn == "MU") {
         cycleSides([cubeArr[2],cubeArr[1],cubeArr[3],cubeArr[0]],[3,4,5]);
     } else if (turn == "mu") {
         cycleSides([cubeArr[0],cubeArr[3],cubeArr[1],cubeArr[2]],[3,4,5]);
+    } else if (turn == "ROTU") {
+        executeTurn("U",cubeArr);
+        executeTurn("MU",cubeArr);
+        executeTurn("d",cubeArr);
+    } else if (turn == "rotu") {
+        executeTurn("u",cubeArr);
+        executeTurn("mu",cubeArr);
+        executeTurn("D",cubeArr);
+    } else if (turn == "ROTR") {
+        executeTurn("R",cubeArr);
+        executeTurn("MR",cubeArr);
+        executeTurn("l",cubeArr);
+    } else if (turn == "rotr") {
+        executeTurn("r",cubeArr);
+        executeTurn("mr",cubeArr);
+        executeTurn("L",cubeArr);
+    } else if (turn == "ROTF") {
+        executeTurn("F",cubeArr);
+        executeTurn("MF",cubeArr);
+        executeTurn("b",cubeArr);
+    } else if (turn == "rotf") {
+        executeTurn("f",cubeArr);
+        executeTurn("mf",cubeArr);
+        executeTurn("B",cubeArr);
     }
 }
 
@@ -961,14 +1020,13 @@ function calculateEndDir (turn,pPos,nPos) {
 
 function getMoves(turn,position,angle) {
     let moves;
-    console.log(turn,position,angle);
     if (turn == "-y") {
         const ypos = position.y;
         if (ypos == 2) {
             moves = "U";
         }
         if (ypos == 0) {
-            moves = "Mu";
+            moves = "MU";
         }
         if (ypos == -2) {
             moves = "d";
@@ -994,7 +1052,7 @@ function getMoves(turn,position,angle) {
             moves = "R";
         }
         if (xpos == 0) {
-            moves = "Mr";
+            moves = "MR";
         }
         if (xpos == -2) {
             moves = "l";
@@ -1017,19 +1075,6 @@ function getMoves(turn,position,angle) {
     if (turn == "-z") {
         const zpos = position.z;
         if (zpos == 2) {
-            moves = "F";
-        }
-        if (zpos == 0) {
-            moves = "Mf";
-        }
-        if (zpos == -2) {
-            moves = "b";
-        }
-    }
-    //======================
-    if (turn == "z") {
-        const zpos = position.z;
-        if (zpos == 2) {
             moves = "f";
         }
         if (zpos == 0) {
@@ -1039,14 +1084,25 @@ function getMoves(turn,position,angle) {
             moves = "B";
         }
     }
+    //======================
+    if (turn == "z") {
+        const zpos = position.z;
+        if (zpos == 2) {
+            moves = "F";
+        }
+        if (zpos == 0) {
+            moves = "MF";
+        }
+        if (zpos == -2) {
+            moves = "b";
+        }
+    }
 
     return moves;
 }
 
 function executeMoves (move) {
-    console.log(move);
     executeTurn(move,cubeArr);
-    console.log(cubeArr);
 }
 
 function checkPrev (pos,prevPos) {
@@ -1062,7 +1118,729 @@ function checkPrev (pos,prevPos) {
     return false;
 }
 
-console.log(cubeArr);
+function compareArrays (arr1,arr2) {
+    for (let i = 0; i < arr1.length; i++) {
+        
+            if (arr1[i] !== arr2[i]) {
+                return false;
+            }
+        
+    }
+    return true;
+}
+
+function dupe (arr1) {
+    return JSON.parse(JSON.stringify(arr1));
+}
+
+function compareCubeArrs (cubeArr1,cubeArr2) {
+    for (let i = 0; i < 6; i++) {
+        if (!compareArrays(cubeArr1[i],cubeArr2[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function checkCubeSolved (cubeArr) {
+    for (let side of cubeArr) {
+        for (let i = 0; i < side.length-1; i++) {
+            if (side[i] !== side[i+1]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+function getInverseMove (move) {
+    if (move === null) {
+        return "T";
+    } else if (move.toLowerCase() === move) {
+        return move.toUpperCase();
+    } else {
+        return move.toLowerCase();
+    }
+}
+
+class Node {
+    constructor () {
+        this.cubeArr = null;
+        this.parent = null;
+        this.fromMove = null;
+    }
+}
+
+// Imagine this solveRubiksArr is a seperate module just coded in this file!
+
+function solveRubiksArr (cubeArr) {
+    const dupeArr = dupe(cubeArr);
+    const moveStack = [];
+
+    function executeMove (move) {
+        executeTurn(move,dupeArr);
+        moveStack.push(move);
+    }
+
+    function executeMoveMult (moveArr) {
+        for (let i = 0; i < moveArr.length; i++) {
+            executeMove(moveArr[i]);
+        }
+    }
+
+    function getValArr (array,index) {
+        const dupe = [...array];
+        return dupe[index];
+    }
+
+    function solveCross (topNum,cubeArr) {
+            function bottomLayerFacingDown (topNum,cubeArr) {
+                let valid = 0;
+
+                for (let i = 0; i < 9; i++) {
+                    if (cubeArr[5][i] === topNum && i % 2 == 1) {
+                        valid += 1;
+                        let grab;
+                        let sideindex;
+                        let coSide;
+                        if (i == 1) {
+                            grab = getValArr(cubeArr[2],7);
+                            sideindex = 2;
+                            coSide = "F";
+                        }
+                        if (i == 3) {
+                            grab = getValArr(cubeArr[1],7);
+                            sideindex = 1;
+                            coSide = "L";
+                        }
+                        if (i == 5) {
+                            grab = getValArr(cubeArr[0],7);
+                            sideindex = 0;
+                            coSide = "R";
+                        }
+                        if (i == 7) {
+                            grab = getValArr(cubeArr[3],7);
+                            sideindex = 3;
+                            coSide = "B";
+                        }
+
+                        let orderArr = [2,0,3,1];
+                        let faceArr = ["F","R","B","L"];
+                        let pointer = 0;
+                        while (orderArr[pointer] !== sideindex) {
+                            pointer = (pointer + 1) % 4;
+                        }
+
+                        while (grab !== cubeArr[orderArr[pointer]][4]) {
+                            executeMove("D");
+                            pointer = (pointer + 1) % 4;
+                        }
+                        executeMove(faceArr[pointer]);
+                        executeMove(faceArr[pointer]);
+                    }
+                }
+                
+                return valid;
+            }
+
+
+            function topFaceEdgePieces (topNum,cubeArr) {
+                let valid = 0;
+
+            for (let i = 0; i < 9; i++) {
+                if (cubeArr[4][i] == topNum && i % 2 !== 0) {
+                    let coSide;
+                    let grab;
+                    let center;
+
+                    if (i == 1) {
+                        grab = getValArr(cubeArr[3],1);
+                        center = getValArr(cubeArr[3],4);
+                        coSide = "B";
+                    }
+                    if (i == 3) {
+                        grab = getValArr(cubeArr[1],1);
+                        center = getValArr(cubeArr[1],4);
+                        coSide = "L";
+                    }
+                    if (i == 5) {
+                        grab = getValArr(cubeArr[0],1);
+                        center = getValArr(cubeArr[0],4);
+                        coSide = "R";
+                    }
+                    if (i == 7) {
+                        grab = getValArr(cubeArr[2],1);
+                        center = getValArr(cubeArr[2],4);
+                        coSide = "F"
+                    }
+
+                    if (grab !== center) {
+                        valid += 1;
+                        executeMove(coSide);
+                        executeMove(coSide);
+
+                        bottomLayerFacingDown(topNum,cubeArr);
+                    }
+                }
+            }
+            
+            return valid;
+        }
+
+        function FacingOut (topNum,cubeArr) {
+            let valid = 0;
+
+            let orderArr = [2,0,3,1];
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 9; j++) {
+                    console.log()
+                    if (cubeArr[orderArr[i]][j] == topNum && j % 2 == 1) {
+                        valid += 1;
+                        if (i == 1) {
+                            executeMove("ROTU");
+                        } else if (i == 2) {
+                            executeMove("ROTU");
+                            executeMove("ROTU");
+                        } else if (i == 3) {
+                            executeMove("rotu");
+                        }
+
+                        if (j == 1) {
+                            executeMove("mr");
+                            executeMove("D");
+                            executeMove("MR");
+                        }
+                        if (j == 3) {
+                            executeMove("L");
+                            executeMove("D");
+                            executeMove("l");
+                        }
+                        if (j == 5) {
+                            executeMove("r");
+                            executeMove("d");
+                            executeMove("R");
+                        }
+                        if (j == 7) {
+                            executeMove("F");
+                            executeMove("L");
+                            executeMove("d");
+                            executeMove("l");
+                            executeMove("f");
+                        }
+
+                        bottomLayerFacingDown(topNum,cubeArr);
+                    }
+                }
+            }
+
+            return valid;
+        }
+
+        let bool = true;
+        while (bool == true) {
+            let count = 0;
+            count += bottomLayerFacingDown(cubeArr[4][4],cubeArr);
+            count += topFaceEdgePieces(cubeArr[4][4],cubeArr);
+            count += FacingOut(cubeArr[4][4],cubeArr);
+
+            if (count == 0) {
+                bool = false;
+            }
+        }
+    }
+
+    function solveCorners (topNum,cubeArr) {
+
+        function FacingDown (topNum,cubeArr) {
+            let valid = 0;
+            for (let i = 0; i < 9; i++) {
+                if (cubeArr[5][i] == topNum && i !== 4 && i % 2 == 0) {
+                    valid += 1;
+                    if (i == 0) {
+                        executeMove("rotu");
+                    }
+                    if (i == 6) {
+                        executeMove("rotu");
+                        executeMove("rotu");
+                    }
+                    if (i == 8) {
+                        executeMove("ROTU");
+                    }
+
+                    const orderArr = [2,0,3,1];
+                    const num = getValArr(cubeArr[2],8);
+                    let index = 0;
+                    for (let j = 0; j < 4; j++) {
+                        if (cubeArr[orderArr[j]][4] == num) {
+                            index = j;
+                            break;
+                        }
+                    }
+                    if (index == 0 ) {
+                        executeMoveMult(["F","d","f","f","D","F"]);
+                    }
+                    if (index == 1) {
+                        executeMoveMult(["r","D","R","d","F","d","f"]);
+                    }
+                    if (index == 2) {
+                        executeMoveMult(["r","D","R","R","d","r"]);
+                    }
+                    if (index == 3) {
+                        executeMoveMult(["F","d","f","d","l","D","L"]);
+                    }
+                }
+            }
+            return valid;
+        }
+
+        function FacingOut (topNum,cubeArr) {
+            let valid = 0;
+            const orderArr = [2,0,3,1];
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (cubeArr[orderArr[i]][j] == topNum && j !== 4 && j % 2 == 0) {
+                        valid += 1;
+                        if (i == 1) {
+                            executeMove("ROTU");
+                        }
+                        if (i == 2) {
+                            executeMove("ROTU");
+                            executeMove("ROTU");
+                        }
+                        if (i == 3) {
+                            executeMove("rotu");
+                        }
+
+                        if (j == 0) {
+                            executeMoveMult(["L","D","l"]);
+                        }
+                        if (j == 2) {
+                            executeMoveMult(["r","d","R"]);
+                        }
+                        if (j == 6) {
+                            executeMoveMult(["L","d","l"]);
+                        }
+                        if (j == 8) {
+                            executeMoveMult(["r","D","R"]);
+                        }
+
+                        FacingDown(topNum,cubeArr);
+                        return valid;
+                    }
+                }
+            }
+            return valid;
+        }
+
+        function FacingUp (topNum,cubeArr) {
+            let valid = 0;
+            for (let i = 0; i < 9; i++) {
+                if (cubeArr[4][i] == cubeArr[4][4] && i != 4 && i % 2 == 0) {
+                    if (i == 0) {
+                        if (cubeArr[1][0] !== cubeArr[1][4]) {
+                            valid += 1;
+                            executeMove("B");
+                            executeMove("D");
+                            executeMove("b");
+                            executeMove("d");
+                            executeMove("B");
+                            executeMove("d");
+                            executeMove("b");
+                        }
+                    }
+                    if (i == 2) {
+                        if (cubeArr[0][2] !== cubeArr[0][4]) {
+                            valid += 1;
+                            executeMove("b");
+                            executeMove("d");
+                            executeMove("B");
+                            executeMove("D");
+                            executeMove("b");
+                            executeMove("D");
+                            executeMove("B");
+                        }
+                    }
+                    if (i == 6) {
+                        if (cubeArr[2][0] !== cubeArr[0][4]) {
+                            valid += 1;
+                            executeMove("L");
+                            executeMove("D");
+                            executeMove("l");
+                            executeMove("d");
+                            executeMove("L");
+                            executeMove("d");
+                            executeMove("l");
+                        }
+                    }
+                    if (i == 8) {
+                        if (cubeArr[2][2] !== cubeArr[2][4] ) {
+                            valid += 1;
+                            executeMove("r");
+                            executeMove("d");
+                            executeMove("R");
+                            executeMove("d");
+                            executeMove("r");
+                            executeMove("D");
+                            executeMove("R");
+                        }
+                    }
+                    FacingDown(topNum,cubeArr);
+                    return valid;
+                }
+            }
+            return valid;
+        }
+
+        let bool = true;
+        while (bool) {
+            let count = 0;
+            count += FacingDown(cubeArr[4][4],cubeArr);
+            count += FacingUp(cubeArr[4][4],cubeArr);
+            count += FacingOut(cubeArr[4][4],cubeArr);
+            if (count == 0) {
+                bool = false;
+            }
+        }
+
+    }
+
+    function solveMiddleEdges (topNum,cubeArr) {
+
+        function solveBottomEdges (topNum, cubeArr) {
+            let valid = 0;
+            for (let i = 0; i < 4; i++) {
+                if (cubeArr[2][7] !== cubeArr[5][4]) {
+                    if (cubeArr[5][1] !== cubeArr[5][4]) {
+                        valid += 1;
+                        const color = getValArr(cubeArr[2],7);
+                        while (cubeArr[2][4] !== color) {
+                            executeMove("ROTU");
+                            executeMove("D");
+                        }
+                        const botColor = getValArr(cubeArr[5],1);
+
+                        if (cubeArr[0][4] == botColor) {
+                            executeMoveMult(["d","r","D","R","D","F","d","f"]);
+                            executeMove("ROTU");
+                        } else if (cubeArr[1][4] == botColor) {
+                            executeMoveMult(["D","L","d","l","d","f","D","F"]);
+                            executeMove("ROTU");
+                        }
+                    } else {
+                        executeMove("ROTU");
+                        continue;
+                    }
+                } else {
+                    executeMove("ROTU");
+                    continue;
+                }
+            }
+            return valid;
+        }
+
+        function middleEdges (topNum,cubeArr) {
+            let valid = 0;
+            for (let i = 0; i < 4; i++) {
+                if ((cubeArr[2][3] !== cubeArr[5][4] && cubeArr[1][5] !== cubeArr[5][4]) && (cubeArr[2][3] !== cubeArr[2][4] && cubeArr[1][5] !== cubeArr[1][4])) {
+                    valid += 1;
+
+                    executeMoveMult(["D","L","d","l","d","f","D","F"]);
+                    return valid;
+                } else if ((cubeArr[2][5] !== cubeArr[5][4] && cubeArr[0][3] !== cubeArr[5][4]) && (cubeArr[2][5] !== cubeArr[2][4] && cubeArr[0][3] !== cubeArr[0][4])) {
+                    valid += 1;
+                    executeMoveMult(["d","r","D","R","D","F","d","f"]);
+                    return valid
+                } else {
+                    executeMove("ROTU");
+                    continue;
+                }
+            }
+            return valid;
+        }
+
+        let bool = true;
+        while (bool) {
+            let count = 0;
+            count += solveBottomEdges(cubeArr[4][4],cubeArr);
+            count += middleEdges(cubeArr[4][4],cubeArr);
+
+            if (count == 0) {
+                bool = false;
+            }
+        }
+
+    }
+
+    function solveYellowCross (topNum,cubeArr) {
+        
+        function matchCase (side,casee) {
+            for (let i = 0; i < 9; i++) {
+                if (i % 2 == 1) {
+                    if (casee[i] == topNum) {
+                        if (side[i] !== casee[i]) {
+                            return false;
+                        }
+                    } else {
+                        if (side[i] == topNum) {
+                            return false;
+                        }
+                    }
+                } else {
+                    continue;
+                }
+            }
+            return true;
+        }
+
+        const case1 = [-1,-1,-1,
+                       -1,topNum,-1,
+                       -1,-1,-1];
+
+        const case2 = [-1,-1,-1,
+                       topNum,topNum,topNum,
+                       -1,-1,-1];
+
+        const case3 = [-1,-1,-1,
+                       -1,topNum,topNum,
+                       -1,topNum,-1];
+
+        const caseArr = [case1,case2,case3];
+
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (matchCase(cubeArr[4],caseArr[j])) {
+                    if (j == 0) {
+                        executeMoveMult(["F","R","U","r","u","MF","R","U","r","u","f","mf"]);
+                        return;
+                    }
+                    if (j == 1) {
+                        executeMoveMult(["F","R","U","r","u","f"]);
+                        return;
+                    }
+                    if (j == 2) {
+                        executeMoveMult(["F","MF","R","U","r","u","f","mf"]);
+                        return;
+                    }
+                }
+            }
+            executeMove("ROTU");
+        }
+    }
+
+    function orientLastLayer (topNum,cubeArr) {
+
+        function matchCase (side,casee) {
+            for (let i = 0; i < 9; i++) {
+                
+                    if (casee[i] == topNum) {
+                        if (side[i] !== casee[i]) {
+                            return false;
+                        }
+                    } else {
+                        if (side[i] == topNum) {
+                            return false;
+                        }
+                    }
+                
+            }
+            return true;
+        }
+
+        const case1 = [-1,topNum,-1,
+                        topNum,topNum,topNum,
+                       -1,topNum,-1];
+
+        const case2 = [-1,topNum,-1,
+                        topNum,topNum,topNum,
+                       -1,topNum,topNum];
+
+        const case3 = [topNum,topNum,-1,
+                        topNum,topNum,topNum,
+                       topNum,topNum,-1];
+
+        const case4 = [topNum,topNum,-1,
+                        topNum,topNum,topNum,
+                       -1,topNum,topNum];
+
+        const caseArr = [case1,case2,case3,case4];
+
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if (matchCase(cubeArr[4],caseArr[j])) {
+                    if (j == 0) {
+                        if (cubeArr[3][2] == topNum && cubeArr[0][2] == topNum) {
+                            console.log(cubeArr);
+                            console.log(-1);
+                            //L U' R' U L' U (R U R' U) R
+                            executeMoveMult(["L","u","r","U","l","U","R","U","r","U","R"]);
+                            return;
+                        }
+                        if (cubeArr[1][0] == topNum && cubeArr[0][2] == topNum) {
+                            console.log(cubeArr);
+                            console.log(0);
+                            //(R U R' U) R U' R' U R U2 R'
+                            executeMoveMult(["R","U","r","U","R","u","r","U","R","U","U","r"]);
+                            return;
+                        }
+                    }
+                    if (j == 1) {
+                        if (cubeArr[2][0] == topNum) {
+                            console.log(cubeArr);
+                            console.log(1);
+                            //L' U R U' L U R'
+                            executeMoveMult(["l","U","R","u","L","U","r"]);
+                            return;
+                        }
+                        if (cubeArr[2][0] !== topNum) {
+                            console.log(cubeArr);
+                            console.log(2);
+                            //R' U2 (R U R' U) R
+                            executeMoveMult(["r","U","U","R","U","r","U","R"]);
+                            return;
+                        }
+                    }
+                    if (j == 2) {
+                        if (cubeArr[2][2] == topNum) {
+                            console.log(cubeArr);
+                            console.log(3);
+                            //R' F' L F R F' L' F
+                            executeMoveMult(["r","f","L","F","R","f","l","F"]);
+                            return;
+                        }
+                        if (cubeArr[2][2] !== topNum) {
+                            console.log(cubeArr);
+                            console.log(4);
+                            //R2 D R' U2 R D' R' U2 R'
+                            executeMoveMult(["ROTU","R","R","D","r","U","U","R","d","r","U","U","r"]);
+                            return;
+                        }
+                    } 
+                    if (j == 3) {
+                        if (cubeArr[3][0] == topNum) {
+                            console.log(cubeArr);
+                            console.log(5);
+                            //R' F' L' F R F' L F
+                            executeMoveMult(["r","f","l","F","R","f","L","F"]);
+                            return;
+                        }
+                        if (cubeArr[3][0] !== topNum) {
+                            console.log(cubeArr);
+                            console.log(6);
+                            //R' F' L' F R F' L F
+                            executeMoveMult(["ROTU","ROTU","r","f","l","F","R","f","L","F"]);
+                            return;
+                        }
+                    } 
+                }
+            }
+            executeMove("ROTU");
+        }
+    }
+
+    function permuteLastLayer (topArr,cubeArr) {
+        let count = 0;
+        for (let i = 0; i < 4; i++) {
+            if (cubeArr[2][0] == cubeArr[2][2] && cubeArr[0][0] !== cubeArr[0][2]) {
+                executeMoveMult(["ROTU","ROTU","r","F","r","B","B","R","f","r","B","B","R","R"]);
+                break;
+            } else {
+                executeMove("ROTU");
+                count += 1;
+            }
+        }
+
+        if (count == 4) {
+            executeMoveMult(["r","F","r","B","B","R","f","r","B","B","R","R"]);
+            for (let i = 0; i < 4; i++) {
+            if (cubeArr[2][0] == cubeArr[2][2] && cubeArr[0][0] !== cubeArr[0][2]) {
+                executeMoveMult(["ROTU","ROTU","r","F","r","B","B","R","f","r","B","B","R","R"]);
+                break;
+            } else {
+                executeMove("ROTU");
+            }
+        }
+        }
+
+        let temp = 0;
+        for (let i = 0; i < 4; i++) {
+            if ((cubeArr[2][0] == cubeArr[2][1] && cubeArr[2][1] == cubeArr[2][2]) && (cubeArr[0][0] !== cubeArr[0][1])) {
+                if (cubeArr[1][1] == cubeArr[3][0]) {
+                    executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
+                    break;
+                } else if (cubeArr[1][1] !== cubeArr[3][0]) {
+                    executeMoveMult(["R","U","r","u","l","u","L","U","U","R","u","r","u","l","U","L"]);
+                    break;
+                }
+            } else {
+                executeMove("ROTU");
+                temp += 1;
+            }
+        }
+
+        if (temp == 4) {
+            executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
+            for (let i = 0; i < 4; i++) {
+                if ((cubeArr[2][0] == cubeArr[2][1] && cubeArr[2][1] == cubeArr[2][2]) && (cubeArr[0][0] !== cubeArr[0][1])) {
+                    if (cubeArr[1][1] == cubeArr[3][0]) {
+                        executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
+                        break;
+                    } else if (cubeArr[1][1] !== cubeArr[3][0]) {
+                        executeMoveMult(["R","U","r","u","l","u","L","U","U","R","u","r","u","l","U","L"]);
+                        break;
+                    }
+                } else {
+                    executeMove("ROTU");
+                }
+            }
+        }
+    
+        while (cubeArr[2][0] !== cubeArr[2][4]) {
+            executeMove("U");
+        }
+
+    }
+
+    solveCross(dupeArr[4][4],dupeArr);
+    console.log("solved cross");
+    solveCorners(dupeArr[4][4],dupeArr);
+    console.log("solved corners");
+    solveMiddleEdges(dupeArr[4][4],dupeArr);
+    console.log("solved middle edges");
+    executeMoveMult(["ROTR","ROTR"]);
+    solveYellowCross(dupeArr[4][4],dupeArr)
+    console.log("solved yellow cross!");
+    orientLastLayer(dupeArr[4][4],dupeArr);
+    console.log("oriented");
+    permuteLastLayer(dupeArr[4][4],dupeArr);
+    console.log("solved");
+    insertSolve(moveStack.reverse());
+
+}
+
+// End of SolveCubeArr
+
+if (touchScreen == false) {
+    resetBtn.addEventListener("click", e => {
+        resetCube();
+    });
+    scrambleBtn.addEventListener("click", e => {
+        generateScramble();
+    });
+    solveBtn.addEventListener("click", e => {
+        solveRubiksArr(cubeArr);
+    });
+}
+if (touchScreen == true) {
+    resetBtn.addEventListener("touchstart", e => {
+        resetCube();
+    });
+    scrambleBtn.addEventListener("touchstart", e => {
+        generateScramble();
+    });
+    solveBtn.addEventListener("touchstart", e => {
+        solveRubiksArr(cubeArr);
+    });
+}
 
 /*
 let bool = true;
@@ -1147,6 +1925,14 @@ function animate() {
                         }
                     }
                 }
+                if (scrambleStack.current == "ROTR") {
+                    executeTurn("ROTR",cubeArr);
+                    axis = "x";
+                    angle = -Math.PI/16;
+                    for (let item of cubes) {
+                        selectSide.push(item);
+                    }
+                }
                 if (scrambleStack.current == "r") {
                     executeTurn("r",cubeArr);
                     axis = "x";
@@ -1157,10 +1943,18 @@ function animate() {
                         }
                     }
                 }
+                if (scrambleStack.current == "rotr") {
+                    executeTurn("rotr",cubeArr);
+                    axis = "x";
+                    angle = Math.PI/16;
+                    for (let item of cubes) {
+                        selectSide.push(item);
+                    }
+                }
                 if (scrambleStack.current == "L") {
                     executeTurn("L",cubeArr);
                     axis = "x";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == -2) {
                             selectSide.push(item);
@@ -1170,9 +1964,29 @@ function animate() {
                 if (scrambleStack.current == "l") {
                     executeTurn("l",cubeArr);
                     axis = "x";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.x == -2) {
+                            selectSide.push(item);
+                        }
+                    }
+                }
+                if (scrambleStack.current == "MR") {
+                    executeTurn("MR",cubeArr);
+                    axis = "x";
+                    angle = -Math.PI/16;
+                    for (let item of cubes) {
+                        if (item.position.x == 0) {
+                            selectSide.push(item);
+                        }
+                    }
+                }
+                if (scrambleStack.current == "mr") {
+                    executeTurn("mr",cubeArr);
+                    axis = "x";
+                    angle = Math.PI/16;
+                    for (let item of cubes) {
+                        if (item.position.x == 0) {
                             selectSide.push(item);
                         }
                     }
@@ -1187,6 +2001,14 @@ function animate() {
                         }
                     }
                 }
+                if (scrambleStack.current == "ROTU") {
+                    executeTurn("ROTU",cubeArr);
+                    axis = "y";
+                    angle = -Math.PI/16;
+                    for (let item of cubes) {
+                        selectSide.push(item);
+                    }
+                }
                 if (scrambleStack.current == "u") {
                     executeTurn("u",cubeArr);
                     axis = "y";
@@ -1197,10 +2019,18 @@ function animate() {
                         }
                     }
                 }
+                if (scrambleStack.current == "rotu") {
+                    executeTurn("rotu",cubeArr);
+                    axis = "y";
+                    angle = Math.PI/16;
+                    for (let item of cubes) {
+                        selectSide.push(item);
+                    }
+                }
                 if (scrambleStack.current == "D") {
                     executeTurn("D",cubeArr);
                     axis = "y";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == -2) {
                             selectSide.push(item);
@@ -1210,9 +2040,29 @@ function animate() {
                 if (scrambleStack.current == "d") {
                     executeTurn("d",cubeArr);
                     axis = "y";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.y == -2) {
+                            selectSide.push(item);
+                        }
+                    }
+                }
+                if (scrambleStack.current == "MU") {
+                    executeTurn("MU",cubeArr);
+                    axis = "y";
+                    angle = -Math.PI/16;
+                    for (let item of cubes) {
+                        if (item.position.y == 0) {
+                            selectSide.push(item);
+                        }
+                    }
+                }
+                if (scrambleStack.current == "mu") {
+                    executeTurn("mu",cubeArr);
+                    axis = "y";
+                    angle = Math.PI/16;
+                    for (let item of cubes) {
+                        if (item.position.y == 0) {
                             selectSide.push(item);
                         }
                     }
@@ -1227,6 +2077,14 @@ function animate() {
                         }
                     }
                 }
+                if (scrambleStack.current == "ROTF") {
+                    executeTurn("ROTF",cubeArr);
+                    axis = "z";
+                    angle = -Math.PI/16;
+                    for (let item of cubes) {
+                        selectSide.push(item);
+                    }
+                }
                 if (scrambleStack.current == "f") {
                     executeTurn("f",cubeArr);
                     axis = "z";
@@ -1237,10 +2095,18 @@ function animate() {
                         }
                     }
                 }
+                if (scrambleStack.current == "rotf") {
+                    executeTurn("rotf",cubeArr);
+                    axis = "z";
+                    angle = Math.PI/16;
+                    for (let item of cubes) {
+                            selectSide.push(item);
+                    }
+                }
                 if (scrambleStack.current == "B") {
                     executeTurn("B",cubeArr);
                     axis = "z";
-                    angle = -Math.PI/16;
+                    angle = Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == -2) {
                             selectSide.push(item);
@@ -1250,9 +2116,29 @@ function animate() {
                 if (scrambleStack.current == "b") {
                     executeTurn("b",cubeArr);
                     axis = "z";
-                    angle = Math.PI/16;
+                    angle = -Math.PI/16;
                     for (let item of cubes) {
                         if (item.position.z == -2) {
+                            selectSide.push(item);
+                        }
+                    }
+                }
+                if (scrambleStack.current == "MF") {
+                    executeTurn("MF",cubeArr);
+                    axis = "z";
+                    angle = -Math.PI/16;
+                    for (let item of cubes) {
+                        if (item.position.z == 0) {
+                            selectSide.push(item);
+                        }
+                    }
+                }
+                if (scrambleStack.current == "mf") {
+                    executeTurn("mf",cubeArr);
+                    axis = "z";
+                    angle = Math.PI/16;
+                    for (let item of cubes) {
+                        if (item.position.z == 0) {
                             selectSide.push(item);
                         }
                     }
@@ -1262,7 +2148,6 @@ function animate() {
                 scrambleStack.current = null;
                 roundCubelets(selectSide);
                 selectSide = [];
-                console.log(cubeArr);
             } else {
                 rStep -= 1;
                 for (let item of selectSide) {
@@ -1505,8 +2390,6 @@ function animate() {
     labelRenderer.render(scene,camera);
 }
 
-renderer.setAnimationLoop(animate);
-
 window.addEventListener("resize", function () {
     camera.aspect = window.innerWidth/window.innerHeight;
     camera.updateProjectionMatrix();
@@ -1514,7 +2397,7 @@ window.addEventListener("resize", function () {
     labelRenderer.setSize(window.innerWidth,window.innerHeight*0.1);
 })
 
-
+renderer.setAnimationLoop(animate);
     </script>
 </head>
 <body>
