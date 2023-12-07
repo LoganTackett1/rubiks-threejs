@@ -1,27 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rubiks Cube</title>
-    <link rel="stylesheet" href="styles.css">
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.153.0/three.module.js",
-                "TrackballControls": "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/controls/TrackballControls.js",
-                "GLTFLoader": "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/loaders/GLTFLoader.js",
-                "CSS2DRenderer" : "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/renderers/CSS2DRenderer.js"
-            }
-        }
-    </script>
-    <script type="module" defer>
-
 import * as THREE from 'three';
-import { TrackballControls } from 'TrackballControls';
-import { GLTFLoader } from 'GLTFLoader';
-import { CSS2DRenderer, CSS2DObject } from 'CSS2DRenderer';
+import * as Cube from 'cubejs';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer';
+import css from './styles.css';
 
 const renderer = new THREE.WebGLRenderer({antialias:true});
 
@@ -66,157 +48,160 @@ class Cubelet extends THREE.Group {
     }
     onCreate(x) {
         cubes.push(this);
-        loader.load(x.href, gltf => {
+        loader.load(x, gltf => {
             this.add(gltf.scene);
+            for (let child of gltf.scene.children[0].children) {
+                child.material.metalness = 0;
+            }
             scene.add(this);
         });
     }
 }
 
-const grwURL = new URL('blender/corners/GRW.glb',import.meta.url);
-const GRW = new Cubelet(grwURL);
+//const grwURL = new URL('blender/corners/GRW.glb',import.meta.url);
+const GRW = new Cubelet('./blender/corners/GRW.glb');
 GRW.position.set(2,2,2);
 GRW.rotateY(Math.PI/2);
 
-const rbwURL = new URL('blender/corners/RBW.glb',import.meta.url);
-const RBW = new Cubelet(rbwURL);
+//const rbwURL = new URL('blender/corners/RBW.glb',import.meta.url);
+const RBW = new Cubelet('./blender/corners/RBW.glb');
 RBW.position.set(2,2,-2);
 RBW.rotateY(Math.PI);
 
-const bowURL = new URL('blender/corners/BOW.glb',import.meta.url);
-const BOW = new Cubelet(bowURL);
+//const bowURL = new URL('blender/corners/BOW.glb',import.meta.url);
+const BOW = new Cubelet('./blender/corners/BOW.glb');
 BOW.position.set(-2,2,-2);
 BOW.rotateY(Math.PI*(3/2));
 
-const ogwURL = new URL('blender/corners/OGW.glb',import.meta.url);
-const OGW = new Cubelet(ogwURL);
+//const ogwURL = new URL('blender/corners/OGW.glb',import.meta.url);
+const OGW = new Cubelet('./blender/corners/OGW.glb');
 OGW.position.set(-2,2,2);
 OGW.rotateY(0);
 
-const gwURL = new URL('blender/edges_centers/GW.glb',import.meta.url);
-const GW = new Cubelet(gwURL);
+//const gwURL = new URL('blender/edges_centers/GW.glb',import.meta.url);
+const GW = new Cubelet('./blender/edges_centers/GW.glb');
 GW.position.set(0,2,2);
 GW.rotateY(0);
 
-const rwURL = new URL('blender/edges_centers/RW.glb',import.meta.url);
-const RW = new Cubelet(rwURL);
+//const rwURL = new URL('blender/edges_centers/RW.glb',import.meta.url);
+const RW = new Cubelet('./blender/edges_centers/RW.glb');
 RW.position.set(2,2,0);
 RW.rotateY(Math.PI/2);
 
-const bwURL = new URL('blender/edges_centers/BW.glb',import.meta.url);
-const BW = new Cubelet(bwURL);
+//const bwURL = new URL('blender/edges_centers/BW.glb',import.meta.url);
+const BW = new Cubelet('./blender/edges_centers/BW.glb');
 BW.position.set(0,2,-2);
 BW.rotateY(Math.PI);
 
-const owURL = new URL('blender/edges_centers/OW.glb',import.meta.url);
-const OW = new Cubelet(owURL);
+//const owURL = new URL('blender/edges_centers/OW.glb',import.meta.url);
+const OW = new Cubelet('./blender/edges_centers/OW.glb');
 OW.position.set(-2,2,0);
 OW.rotateY(Math.PI*(3/2));
 
-const wURL = new URL('blender/edges_centers/W.glb',import.meta.url);
-const W = new Cubelet(wURL);
+//const wURL = new URL('blender/edges_centers/W.glb',import.meta.url);
+const W = new Cubelet('./blender/edges_centers/W.glb');
 W.position.set(0,2,0);
 W.rotateY(0);
 
 //
 
-const gryURL = new URL('blender/corners/GRY.glb',import.meta.url);
-const GRY = new Cubelet(gryURL);
+//const gryURL = new URL('blender/corners/GRY.glb',import.meta.url);
+const GRY = new Cubelet('./blender/corners/GRY.glb');
 GRY.position.set(2,-2,2);
 GRY.rotateX(Math.PI);
 GRY.rotateY(Math.PI);
 
-const rbyURL = new URL('blender/corners/RBY.glb',import.meta.url);
-const RBY = new Cubelet(rbyURL);
+//const rbyURL = new URL('blender/corners/RBY.glb',import.meta.url);
+const RBY = new Cubelet('./blender/corners/RBY.glb');
 RBY.position.set(2,-2,-2);
 RBY.rotateX(Math.PI);
 RBY.rotateY(Math.PI/2);
 
-const boyURL = new URL('blender/corners/BOY.glb',import.meta.url);
-const BOY = new Cubelet(boyURL);
+//const boyURL = new URL('blender/corners/BOY.glb',import.meta.url);
+const BOY = new Cubelet('./blender/corners/BOY.glb');
 BOY.position.set(-2,-2,-2);
 BOY.rotateX(Math.PI);
 BOY.rotateY(0);
 
-const ogyURL = new URL('blender/corners/OGY.glb',import.meta.url);
-const OGY = new Cubelet(ogyURL);
+//const ogyURL = new URL('blender/corners/OGY.glb',import.meta.url);
+const OGY = new Cubelet('./blender/corners/OGY.glb');
 OGY.position.set(-2,-2,2);
 OGY.rotateX(Math.PI);
 OGY.rotateY(Math.PI*(3/2));
 
-const gyURL = new URL('blender/edges_centers/GY.glb',import.meta.url);
-const GY = new Cubelet(gyURL);
+//const gyURL = new URL('blender/edges_centers/GY.glb',import.meta.url);
+const GY = new Cubelet('./blender/edges_centers/GY.glb');
 GY.position.set(0,-2,2);
 GY.rotateX(Math.PI);
 GY.rotateY(Math.PI);
 
-const ryURL = new URL('blender/edges_centers/RY.glb',import.meta.url);
-const RY = new Cubelet(ryURL);
+//const ryURL = new URL('blender/edges_centers/RY.glb',import.meta.url);
+const RY = new Cubelet('./blender/edges_centers/RY.glb');
 RY.position.set(2,-2,0);
 RY.rotateX(Math.PI);
 RY.rotateY(Math.PI/2);
 
-const byURL = new URL('blender/edges_centers/BY.glb',import.meta.url);
-const BY = new Cubelet(byURL);
+//const byURL = new URL('blender/edges_centers/BY.glb',import.meta.url);
+const BY = new Cubelet('./blender/edges_centers/BY.glb');
 BY.position.set(0,-2,-2);
 BY.rotateX(Math.PI);
 BY.rotateY(0);
 
-const oyURL = new URL('blender/edges_centers/OY.glb',import.meta.url);
-const OY = new Cubelet(oyURL);
+//const oyURL = new URL('blender/edges_centers/OY.glb',import.meta.url);
+const OY = new Cubelet('./blender/edges_centers/OY.glb');
 OY.position.set(-2,-2,0);
 OY.rotateX(Math.PI);
 OY.rotateY(Math.PI*(3/2));
 
 
-const yURL = new URL('blender/edges_centers/Y.glb',import.meta.url);
-const Y = new Cubelet(yURL);
+//const yURL = new URL('blender/edges_centers/Y.glb',import.meta.url);
+const Y = new Cubelet('./blender/edges_centers/Y.glb');
 Y.position.set(0,-2,0);
 Y.rotateX(Math.PI);
 
 //
 
-const rgURL = new URL('blender/edges_centers/RG.glb',import.meta.url);
-const RG = new Cubelet(rgURL);
+//const rgURL = new URL('blender/edges_centers/RG.glb',import.meta.url);
+const RG = new Cubelet('./blender/edges_centers/RG.glb');
 RG.position.set(2,0,2);
 RG.rotateY(Math.PI*(1/2));
 RG.rotateZ(Math.PI*(1/2));
 
-const brURL = new URL('blender/edges_centers/BR.glb',import.meta.url);
-const BR = new Cubelet(brURL);
+//const brURL = new URL('blender/edges_centers/BR.glb',import.meta.url);
+const BR = new Cubelet('./blender/edges_centers/BR.glb');
 BR.position.set(2,0,-2);
 BR.rotateY(Math.PI);
 BR.rotateZ(Math.PI/2);
 
-const obURL = new URL('blender/edges_centers/OB.glb',import.meta.url);
-const OB = new Cubelet(obURL);
+//const obURL = new URL('blender/edges_centers/OB.glb',import.meta.url);
+const OB = new Cubelet('./blender/edges_centers/OB.glb');
 OB.position.set(-2,0,-2);
 OB.rotateY(-Math.PI/2);
 OB.rotateZ(Math.PI/2);
 
-const goURL = new URL('blender/edges_centers/GO.glb',import.meta.url);
-const GO = new Cubelet(goURL);
+//const goURL = new URL('blender/edges_centers/GO.glb',import.meta.url);
+const GO = new Cubelet('./blender/edges_centers/GO.glb');
 GO.position.set(-2,0,2);
 GO.rotateY(0);
 GO.rotateZ(Math.PI/2);
 
-const gURL = new URL('blender/edges_centers/G.glb',import.meta.url);
-const G = new Cubelet(gURL);
+//const gURL = new URL('blender/edges_centers/G.glb',import.meta.url);
+const G = new Cubelet('./blender/edges_centers/G.glb');
 G.position.set(0,0,2);
 G.rotateX(Math.PI/2);
 
-const rURL = new URL('blender/edges_centers/R.glb',import.meta.url);
-const R = new Cubelet(rURL);
+//const rURL = new URL('blender/edges_centers/R.glb',import.meta.url);
+const R = new Cubelet('./blender/edges_centers/R.glb');
 R.position.set(2,0,0);
 R.rotateZ(-Math.PI/2);
 
-const bURL = new URL('blender/edges_centers/B.glb',import.meta.url);
-const B = new Cubelet(bURL);
+//const bURL = new URL('blender/edges_centers/B.glb',import.meta.url);
+const B = new Cubelet('./blender/edges_centers/B.glb');
 B.position.set(0,0,-2);
 B.rotateX(-Math.PI/2);
 
-const oURL = new URL('blender/edges_centers/O.glb',import.meta.url);
-const O = new Cubelet(oURL);
+//const oURL = new URL('blender/edges_centers/O.glb',import.meta.url);
+const O = new Cubelet('./blender/edges_centers/O.glb');
 O.position.set(-2,0,0);
 O.rotateZ(Math.PI/2);
 
@@ -242,7 +227,7 @@ function resetCube() {
 
 
 
-const ambientLight = new THREE.AmbientLight(0xFFFFFF);
+const ambientLight = new THREE.AmbientLight(0xFFFFFF,3);
 scene.add(ambientLight);
 
 function calcRotationAroundAxis( obj3D, axis, angle ){
@@ -378,7 +363,7 @@ function firstCube(obj) {
     }
 }
 
-const pXZ = new THREE.Mesh(new THREE.PlaneBufferGeometry(6, 6), 
+const pXZ = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), 
    new THREE.MeshBasicMaterial( {
        color: 0x248f24, alphaTest: 0, visible: false
 }));
@@ -389,7 +374,7 @@ scene.add(pXZ);
 pXZ.rotation.x = -Math.PI/2;
 pXZ.position.set(0,3,0);
 
-const nXZ = new THREE.Mesh(new THREE.PlaneBufferGeometry(6, 6), 
+const nXZ = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), 
    new THREE.MeshBasicMaterial( {
        color: 0x248f24, alphaTest: 0, visible: false
 }));
@@ -400,7 +385,7 @@ scene.add(nXZ);
 nXZ.rotation.x = Math.PI/2;
 nXZ.position.set(0,-3,0);
 
-const pYZ = new THREE.Mesh(new THREE.PlaneBufferGeometry(6, 6), 
+const pYZ = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), 
    new THREE.MeshBasicMaterial( {
        color: 0x248f24, alphaTest: 0, visible: false
 }));
@@ -411,7 +396,7 @@ scene.add(pYZ);
 pYZ.rotation.y = Math.PI/2;
 pYZ.position.set(3,0,0);
 
-const nYZ = new THREE.Mesh(new THREE.PlaneBufferGeometry(6, 6), 
+const nYZ = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), 
    new THREE.MeshBasicMaterial( {
        color: 0x248f24, alphaTest: 0, visible: false
 }));
@@ -422,7 +407,7 @@ scene.add(nYZ);
 nYZ.rotation.y = -Math.PI/2;
 nYZ.position.set(-3,0,0);
 
-const pXY = new THREE.Mesh(new THREE.PlaneBufferGeometry(6, 6), 
+const pXY = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), 
    new THREE.MeshBasicMaterial( {
        color: 0x248f24, alphaTest: 0, visible: false
 }));
@@ -433,7 +418,7 @@ scene.add(pXY);
 pXY.rotation.y = 0;
 pXY.position.set(0,0,3);
 
-const nXY = new THREE.Mesh(new THREE.PlaneBufferGeometry(6, 6), 
+const nXY = new THREE.Mesh(new THREE.PlaneGeometry(6, 6), 
    new THREE.MeshBasicMaterial( {
        color: 0x248f24, alphaTest: 0, visible: false
 }));
@@ -1157,681 +1142,73 @@ function checkCubeSolved (cubeArr) {
     return true;
 }
 
-function getInverseMove (move) {
-    if (move === null) {
-        return "T";
-    } else if (move.toLowerCase() === move) {
-        return move.toUpperCase();
-    } else {
-        return move.toLowerCase();
-    }
-}
-
-class Node {
-    constructor () {
-        this.cubeArr = null;
-        this.parent = null;
-        this.fromMove = null;
-    }
-}
-
 // Imagine this solveRubiksArr is a seperate module just coded in this file!
 
+function sideFromNum (num,cubeArr) {
+    if (num == cubeArr[4][4]) {
+        return "U";
+    }
+    if (num == cubeArr[5][4]) {
+        return "D";
+    }
+    if (num == cubeArr[2][4]) {
+        return "F";
+    }
+    if (num == cubeArr[3][4]) {
+        return "B";
+    }
+    if (num == cubeArr[0][4]) {
+        return "R";
+    }
+    if (num == cubeArr[1][4]) {
+        return "L";
+    }
+}
+
+function solArrFromSol (sol) {
+    const result = [];
+    let i = 0;
+    while (i < sol.length) {
+        if (sol.charAt(i) == " ") {
+            i += 1;
+        } else {
+            if (sol.charAt(i+1) == "2") {
+                result.push(sol.charAt(i));
+                result.push(sol.charAt(i));
+                i += 2;
+            } else if (sol.charAt(i+1) == "'") {
+                result.push(sol.charAt(i).toLowerCase());
+                i += 2;
+            } else {
+                result.push(sol.charAt(i));
+                i += 1;
+            }
+        }
+    }
+
+    return result;
+}
+
+
+Cube.initSolver();
+
 function solveRubiksArr (cubeArr) {
-    const dupeArr = dupe(cubeArr);
-    const moveStack = [];
-
-    function executeMove (move) {
-        executeTurn(move,dupeArr);
-        moveStack.push(move);
+    if (checkCubeSolved(cubeArr)) {
+        return;
     }
-
-    function executeMoveMult (moveArr) {
-        for (let i = 0; i < moveArr.length; i++) {
-            executeMove(moveArr[i]);
+    const orderArr = [4,0,2,5,1,3];
+    let cubeStr = "";
+    for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 9; j++) {
+            cubeStr += sideFromNum(cubeArr[orderArr[i]][j],cubeArr);
         }
     }
 
-    function getValArr (array,index) {
-        const dupe = [...array];
-        return dupe[index];
-    }
+    const cube = Cube.fromString(cubeStr);
+    let sol = cube.solve();
+    console.log(sol);
 
-    function solveCross (topNum,cubeArr) {
-            function bottomLayerFacingDown (topNum,cubeArr) {
-                let valid = 0;
-
-                for (let i = 0; i < 9; i++) {
-                    if (cubeArr[5][i] === topNum && i % 2 == 1) {
-                        valid += 1;
-                        let grab;
-                        let sideindex;
-                        let coSide;
-                        if (i == 1) {
-                            grab = getValArr(cubeArr[2],7);
-                            sideindex = 2;
-                            coSide = "F";
-                        }
-                        if (i == 3) {
-                            grab = getValArr(cubeArr[1],7);
-                            sideindex = 1;
-                            coSide = "L";
-                        }
-                        if (i == 5) {
-                            grab = getValArr(cubeArr[0],7);
-                            sideindex = 0;
-                            coSide = "R";
-                        }
-                        if (i == 7) {
-                            grab = getValArr(cubeArr[3],7);
-                            sideindex = 3;
-                            coSide = "B";
-                        }
-
-                        let orderArr = [2,0,3,1];
-                        let faceArr = ["F","R","B","L"];
-                        let pointer = 0;
-                        while (orderArr[pointer] !== sideindex) {
-                            pointer = (pointer + 1) % 4;
-                        }
-
-                        while (grab !== cubeArr[orderArr[pointer]][4]) {
-                            executeMove("D");
-                            pointer = (pointer + 1) % 4;
-                        }
-                        executeMove(faceArr[pointer]);
-                        executeMove(faceArr[pointer]);
-                    }
-                }
-                
-                return valid;
-            }
-
-
-            function topFaceEdgePieces (topNum,cubeArr) {
-                let valid = 0;
-
-            for (let i = 0; i < 9; i++) {
-                if (cubeArr[4][i] == topNum && i % 2 !== 0) {
-                    let coSide;
-                    let grab;
-                    let center;
-
-                    if (i == 1) {
-                        grab = getValArr(cubeArr[3],1);
-                        center = getValArr(cubeArr[3],4);
-                        coSide = "B";
-                    }
-                    if (i == 3) {
-                        grab = getValArr(cubeArr[1],1);
-                        center = getValArr(cubeArr[1],4);
-                        coSide = "L";
-                    }
-                    if (i == 5) {
-                        grab = getValArr(cubeArr[0],1);
-                        center = getValArr(cubeArr[0],4);
-                        coSide = "R";
-                    }
-                    if (i == 7) {
-                        grab = getValArr(cubeArr[2],1);
-                        center = getValArr(cubeArr[2],4);
-                        coSide = "F"
-                    }
-
-                    if (grab !== center) {
-                        valid += 1;
-                        executeMove(coSide);
-                        executeMove(coSide);
-
-                        bottomLayerFacingDown(topNum,cubeArr);
-                    }
-                }
-            }
-            
-            return valid;
-        }
-
-        function FacingOut (topNum,cubeArr) {
-            let valid = 0;
-
-            let orderArr = [2,0,3,1];
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 9; j++) {
-                    console.log()
-                    if (cubeArr[orderArr[i]][j] == topNum && j % 2 == 1) {
-                        valid += 1;
-                        if (i == 1) {
-                            executeMove("ROTU");
-                        } else if (i == 2) {
-                            executeMove("ROTU");
-                            executeMove("ROTU");
-                        } else if (i == 3) {
-                            executeMove("rotu");
-                        }
-
-                        if (j == 1) {
-                            executeMove("mr");
-                            executeMove("D");
-                            executeMove("MR");
-                        }
-                        if (j == 3) {
-                            executeMove("L");
-                            executeMove("D");
-                            executeMove("l");
-                        }
-                        if (j == 5) {
-                            executeMove("r");
-                            executeMove("d");
-                            executeMove("R");
-                        }
-                        if (j == 7) {
-                            executeMove("F");
-                            executeMove("L");
-                            executeMove("d");
-                            executeMove("l");
-                            executeMove("f");
-                        }
-
-                        bottomLayerFacingDown(topNum,cubeArr);
-                    }
-                }
-            }
-
-            return valid;
-        }
-
-        let bool = true;
-        while (bool == true) {
-            let count = 0;
-            count += bottomLayerFacingDown(cubeArr[4][4],cubeArr);
-            count += topFaceEdgePieces(cubeArr[4][4],cubeArr);
-            count += FacingOut(cubeArr[4][4],cubeArr);
-
-            if (count == 0) {
-                bool = false;
-            }
-        }
-    }
-
-    function solveCorners (topNum,cubeArr) {
-
-        function FacingDown (topNum,cubeArr) {
-            let valid = 0;
-            for (let i = 0; i < 9; i++) {
-                if (cubeArr[5][i] == topNum && i !== 4 && i % 2 == 0) {
-                    valid += 1;
-                    if (i == 0) {
-                        executeMove("rotu");
-                    }
-                    if (i == 6) {
-                        executeMove("rotu");
-                        executeMove("rotu");
-                    }
-                    if (i == 8) {
-                        executeMove("ROTU");
-                    }
-
-                    const orderArr = [2,0,3,1];
-                    const num = getValArr(cubeArr[2],8);
-                    let index = 0;
-                    for (let j = 0; j < 4; j++) {
-                        if (cubeArr[orderArr[j]][4] == num) {
-                            index = j;
-                            break;
-                        }
-                    }
-                    if (index == 0 ) {
-                        executeMoveMult(["F","d","f","f","D","F"]);
-                    }
-                    if (index == 1) {
-                        executeMoveMult(["r","D","R","d","F","d","f"]);
-                    }
-                    if (index == 2) {
-                        executeMoveMult(["r","D","R","R","d","r"]);
-                    }
-                    if (index == 3) {
-                        executeMoveMult(["F","d","f","d","l","D","L"]);
-                    }
-                }
-            }
-            return valid;
-        }
-
-        function FacingOut (topNum,cubeArr) {
-            let valid = 0;
-            const orderArr = [2,0,3,1];
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 9; j++) {
-                    if (cubeArr[orderArr[i]][j] == topNum && j !== 4 && j % 2 == 0) {
-                        valid += 1;
-                        if (i == 1) {
-                            executeMove("ROTU");
-                        }
-                        if (i == 2) {
-                            executeMove("ROTU");
-                            executeMove("ROTU");
-                        }
-                        if (i == 3) {
-                            executeMove("rotu");
-                        }
-
-                        if (j == 0) {
-                            executeMoveMult(["L","D","l"]);
-                        }
-                        if (j == 2) {
-                            executeMoveMult(["r","d","R"]);
-                        }
-                        if (j == 6) {
-                            executeMoveMult(["L","d","l"]);
-                        }
-                        if (j == 8) {
-                            executeMoveMult(["r","D","R"]);
-                        }
-
-                        FacingDown(topNum,cubeArr);
-                        return valid;
-                    }
-                }
-            }
-            return valid;
-        }
-
-        function FacingUp (topNum,cubeArr) {
-            let valid = 0;
-            for (let i = 0; i < 9; i++) {
-                if (cubeArr[4][i] == cubeArr[4][4] && i != 4 && i % 2 == 0) {
-                    if (i == 0) {
-                        if (cubeArr[1][0] !== cubeArr[1][4]) {
-                            valid += 1;
-                            executeMove("B");
-                            executeMove("D");
-                            executeMove("b");
-                            executeMove("d");
-                            executeMove("B");
-                            executeMove("d");
-                            executeMove("b");
-                        }
-                    }
-                    if (i == 2) {
-                        if (cubeArr[0][2] !== cubeArr[0][4]) {
-                            valid += 1;
-                            executeMove("b");
-                            executeMove("d");
-                            executeMove("B");
-                            executeMove("D");
-                            executeMove("b");
-                            executeMove("D");
-                            executeMove("B");
-                        }
-                    }
-                    if (i == 6) {
-                        if (cubeArr[2][0] !== cubeArr[0][4]) {
-                            valid += 1;
-                            executeMove("L");
-                            executeMove("D");
-                            executeMove("l");
-                            executeMove("d");
-                            executeMove("L");
-                            executeMove("d");
-                            executeMove("l");
-                        }
-                    }
-                    if (i == 8) {
-                        if (cubeArr[2][2] !== cubeArr[2][4] ) {
-                            valid += 1;
-                            executeMove("r");
-                            executeMove("d");
-                            executeMove("R");
-                            executeMove("d");
-                            executeMove("r");
-                            executeMove("D");
-                            executeMove("R");
-                        }
-                    }
-                    FacingDown(topNum,cubeArr);
-                    return valid;
-                }
-            }
-            return valid;
-        }
-
-        let bool = true;
-        while (bool) {
-            let count = 0;
-            count += FacingDown(cubeArr[4][4],cubeArr);
-            count += FacingUp(cubeArr[4][4],cubeArr);
-            count += FacingOut(cubeArr[4][4],cubeArr);
-            if (count == 0) {
-                bool = false;
-            }
-        }
-
-    }
-
-    function solveMiddleEdges (topNum,cubeArr) {
-
-        function solveBottomEdges (topNum, cubeArr) {
-            let valid = 0;
-            for (let i = 0; i < 4; i++) {
-                if (cubeArr[2][7] !== cubeArr[5][4]) {
-                    if (cubeArr[5][1] !== cubeArr[5][4]) {
-                        valid += 1;
-                        const color = getValArr(cubeArr[2],7);
-                        while (cubeArr[2][4] !== color) {
-                            executeMove("ROTU");
-                            executeMove("D");
-                        }
-                        const botColor = getValArr(cubeArr[5],1);
-
-                        if (cubeArr[0][4] == botColor) {
-                            executeMoveMult(["d","r","D","R","D","F","d","f"]);
-                            executeMove("ROTU");
-                        } else if (cubeArr[1][4] == botColor) {
-                            executeMoveMult(["D","L","d","l","d","f","D","F"]);
-                            executeMove("ROTU");
-                        }
-                    } else {
-                        executeMove("ROTU");
-                        continue;
-                    }
-                } else {
-                    executeMove("ROTU");
-                    continue;
-                }
-            }
-            return valid;
-        }
-
-        function middleEdges (topNum,cubeArr) {
-            let valid = 0;
-            for (let i = 0; i < 4; i++) {
-                if ((cubeArr[2][3] !== cubeArr[5][4] && cubeArr[1][5] !== cubeArr[5][4]) && (cubeArr[2][3] !== cubeArr[2][4] && cubeArr[1][5] !== cubeArr[1][4])) {
-                    valid += 1;
-
-                    executeMoveMult(["D","L","d","l","d","f","D","F"]);
-                    return valid;
-                } else if ((cubeArr[2][5] !== cubeArr[5][4] && cubeArr[0][3] !== cubeArr[5][4]) && (cubeArr[2][5] !== cubeArr[2][4] && cubeArr[0][3] !== cubeArr[0][4])) {
-                    valid += 1;
-                    executeMoveMult(["d","r","D","R","D","F","d","f"]);
-                    return valid
-                } else {
-                    executeMove("ROTU");
-                    continue;
-                }
-            }
-            return valid;
-        }
-
-        let bool = true;
-        while (bool) {
-            let count = 0;
-            count += solveBottomEdges(cubeArr[4][4],cubeArr);
-            count += middleEdges(cubeArr[4][4],cubeArr);
-
-            if (count == 0) {
-                bool = false;
-            }
-        }
-
-    }
-
-    function solveYellowCross (topNum,cubeArr) {
-        
-        function matchCase (side,casee) {
-            for (let i = 0; i < 9; i++) {
-                if (i % 2 == 1) {
-                    if (casee[i] == topNum) {
-                        if (side[i] !== casee[i]) {
-                            return false;
-                        }
-                    } else {
-                        if (side[i] == topNum) {
-                            return false;
-                        }
-                    }
-                } else {
-                    continue;
-                }
-            }
-            return true;
-        }
-
-        const case1 = [-1,-1,-1,
-                       -1,topNum,-1,
-                       -1,-1,-1];
-
-        const case2 = [-1,-1,-1,
-                       topNum,topNum,topNum,
-                       -1,-1,-1];
-
-        const case3 = [-1,-1,-1,
-                       -1,topNum,topNum,
-                       -1,topNum,-1];
-
-        const caseArr = [case1,case2,case3];
-
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (matchCase(cubeArr[4],caseArr[j])) {
-                    if (j == 0) {
-                        executeMoveMult(["F","R","U","r","u","MF","R","U","r","u","f","mf"]);
-                        return;
-                    }
-                    if (j == 1) {
-                        executeMoveMult(["F","R","U","r","u","f"]);
-                        return;
-                    }
-                    if (j == 2) {
-                        executeMoveMult(["F","MF","R","U","r","u","f","mf"]);
-                        return;
-                    }
-                }
-            }
-            executeMove("ROTU");
-        }
-    }
-
-    function orientLastLayer (topNum,cubeArr) {
-
-        function matchCase (side,casee) {
-            for (let i = 0; i < 9; i++) {
-                
-                    if (casee[i] == topNum) {
-                        if (side[i] !== casee[i]) {
-                            return false;
-                        }
-                    } else {
-                        if (side[i] == topNum) {
-                            return false;
-                        }
-                    }
-                
-            }
-            return true;
-        }
-
-        const case1 = [-1,topNum,-1,
-                        topNum,topNum,topNum,
-                       -1,topNum,-1];
-
-        const case2 = [-1,topNum,-1,
-                        topNum,topNum,topNum,
-                       -1,topNum,topNum];
-
-        const case3 = [topNum,topNum,-1,
-                        topNum,topNum,topNum,
-                       topNum,topNum,-1];
-
-        const case4 = [topNum,topNum,-1,
-                        topNum,topNum,topNum,
-                       -1,topNum,topNum];
-
-        const caseArr = [case1,case2,case3,case4];
-
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 4; j++) {
-                if (matchCase(cubeArr[4],caseArr[j])) {
-                    if (j == 0) {
-                        if (cubeArr[3][2] == topNum && cubeArr[0][2] == topNum) {
-                            console.log(cubeArr);
-                            console.log(-1);
-                            //L U' R' U L' U (R U R' U) R
-                            executeMoveMult(["L","u","r","U","l","U","R","U","r","U","R"]);
-                            return;
-                        }
-                        if (cubeArr[1][0] == topNum && cubeArr[0][2] == topNum) {
-                            console.log(cubeArr);
-                            console.log(0);
-                            //(R U R' U) R U' R' U R U2 R'
-                            executeMoveMult(["R","U","r","U","R","u","r","U","R","U","U","r"]);
-                            return;
-                        }
-                    }
-                    if (j == 1) {
-                        if (cubeArr[2][0] == topNum) {
-                            console.log(cubeArr);
-                            console.log(1);
-                            //L' U R U' L U R'
-                            executeMoveMult(["l","U","R","u","L","U","r"]);
-                            return;
-                        }
-                        if (cubeArr[2][0] !== topNum) {
-                            console.log(cubeArr);
-                            console.log(2);
-                            //R' U2 (R U R' U) R
-                            executeMoveMult(["r","U","U","R","U","r","U","R"]);
-                            return;
-                        }
-                    }
-                    if (j == 2) {
-                        if (cubeArr[2][2] == topNum) {
-                            console.log(cubeArr);
-                            console.log(3);
-                            //R' F' L F R F' L' F
-                            executeMoveMult(["r","f","L","F","R","f","l","F"]);
-                            return;
-                        }
-                        if (cubeArr[2][2] !== topNum) {
-                            console.log(cubeArr);
-                            console.log(4);
-                            //R2 D R' U2 R D' R' U2 R'
-                            executeMoveMult(["ROTU","R","R","D","r","U","U","R","d","r","U","U","r"]);
-                            return;
-                        }
-                    } 
-                    if (j == 3) {
-                        if (cubeArr[3][0] == topNum) {
-                            console.log(cubeArr);
-                            console.log(5);
-                            //R' F' L' F R F' L F
-                            executeMoveMult(["r","f","l","F","R","f","L","F"]);
-                            return;
-                        }
-                        if (cubeArr[3][0] !== topNum) {
-                            console.log(cubeArr);
-                            console.log(6);
-                            //R' F' L' F R F' L F
-                            executeMoveMult(["ROTU","ROTU","r","f","l","F","R","f","L","F"]);
-                            return;
-                        }
-                    } 
-                }
-            }
-            executeMove("ROTU");
-        }
-    }
-
-    function permuteLastLayer (topArr,cubeArr) {
-        let count = 0;
-        for (let i = 0; i < 4; i++) {
-            if (cubeArr[2][0] == cubeArr[2][2] && cubeArr[0][0] !== cubeArr[0][2]) {
-                executeMoveMult(["ROTU","ROTU","r","F","r","B","B","R","f","r","B","B","R","R"]);
-                break;
-            } else {
-                executeMove("ROTU");
-                count += 1;
-            }
-        }
-
-        if (count == 4) {
-            executeMoveMult(["r","F","r","B","B","R","f","r","B","B","R","R"]);
-            for (let i = 0; i < 4; i++) {
-            if (cubeArr[2][0] == cubeArr[2][2] && cubeArr[0][0] !== cubeArr[0][2]) {
-                executeMoveMult(["ROTU","ROTU","r","F","r","B","B","R","f","r","B","B","R","R"]);
-                break;
-            } else {
-                executeMove("ROTU");
-            }
-        }
-        }
-
-        let temp = 0;
-        for (let i = 0; i < 4; i++) {
-            if ((cubeArr[2][0] == cubeArr[2][1]) && (cubeArr[0][0] !== cubeArr[0][1])) {
-                if (cubeArr[1][1] == cubeArr[3][0]) {
-                    executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
-                    break;
-                } else if (cubeArr[1][1] !== cubeArr[3][0]) {
-                    executeMoveMult(["R","U","r","u","l","u","L","U","U","R","u","r","u","l","U","L"]);
-                    break;
-                }
-            } else {
-                executeMove("ROTU");
-                temp += 1;
-            }
-        }
-
-        if (temp == 4) {
-            executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
-            for (let i = 0; i < 4; i++) {
-                if ((cubeArr[2][0] == cubeArr[2][1]) && (cubeArr[0][0] !== cubeArr[0][1])) {
-                    if (cubeArr[1][1] == cubeArr[3][0]) {
-                        executeMoveMult(["l","u","L","U","R","U","r","u","u","l","U","L","U","R","u","r"]);
-                        break;
-                    } else if (cubeArr[1][1] !== cubeArr[3][0]) {
-                        executeMoveMult(["R","U","r","u","l","u","L","U","U","R","u","r","u","l","U","L"]);
-                        break;
-                    }
-                } else {
-                    executeMove("ROTU");
-                }
-        }
-        }
-    
-        while (cubeArr[2][0] !== cubeArr[2][4]) {
-            executeMove("U");
-        }
-
-    }
-
-    function checkSolved (cubeArr) {
-            for (let side of cubeArr) {
-                for (let i = 0; i < 8; i++) {
-                    if (side[i] !== side[i+1]) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-
-    if (!checkSolved(dupeArr)) {
-        solveCross(dupeArr[4][4],dupeArr);
-        console.log("solved cross");
-        solveCorners(dupeArr[4][4],dupeArr);
-        console.log("solved corners");
-        solveMiddleEdges(dupeArr[4][4],dupeArr);
-        console.log("solved middle edges");
-        executeMoveMult(["ROTR","ROTR"]);
-        solveYellowCross(dupeArr[4][4],dupeArr)
-        console.log("solved yellow cross!");
-        orientLastLayer(dupeArr[4][4],dupeArr);
-        console.log("oriented");
-        permuteLastLayer(dupeArr[4][4],dupeArr);
-        console.log("solved");
-        insertSolve(moveStack.reverse());
-    }
-
+    insertSolve(solArrFromSol(sol).reverse());
 }
 
 // End of SolveCubeArr
@@ -2415,9 +1792,3 @@ window.addEventListener("resize", function () {
 })
 
 renderer.setAnimationLoop(animate);
-    </script>
-</head>
-<body>
-</body>
-</html>
-
