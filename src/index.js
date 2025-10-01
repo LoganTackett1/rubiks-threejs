@@ -288,6 +288,28 @@ if (touchScreen == false) {
     trackBall.maxDistance = 50;
 }
 
+// --- NEW: parse zoom parameter from URL ---
+const params = new URLSearchParams(window.location.search);
+const zoomParam = params.get("zoom");
+
+if (zoomParam !== null) {
+    if (zoomParam.toLowerCase() === "false") {
+        // lock zoom at current camera distance
+        const dist = camera.position.length(); 
+        trackBall.minDistance = dist;
+        trackBall.maxDistance = dist;
+    } else if (!isNaN(Number(zoomParam))) {
+        // lock zoom at specific number
+        const zoomDist = Number(zoomParam);
+        // move camera so distance matches
+        camera.position.setLength(zoomDist);
+        trackBall.minDistance = zoomDist;
+        trackBall.maxDistance = zoomDist;
+    } else {
+        //nothing
+    }
+}
+
 const mousePosition = new THREE.Vector2();
 
 const rayCaster = new THREE.Raycaster();
